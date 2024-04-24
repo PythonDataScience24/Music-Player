@@ -25,6 +25,6 @@ To get started with S-Wave, follow these steps:
 ---
 
 **Developed by:**
-[Christian Gafner, Julien Chopin, ADDNAMES]
+[Christian Gafner, Julien Chopin, Massimiliano Vella, Alexander Mlekus]
 
 For any inquiries or feedback, please contact [firstName.lastName@students.unibe.ch].
