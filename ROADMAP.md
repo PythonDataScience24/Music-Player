@@ -24,4 +24,4 @@ And lastly, we aim to implement an appropraite GUI until the 16.05.2024.
 
 ---
 
-Group Project for University Bern by Christian Gafner[21-917-075], Julien Chopin[21-916-846] **ADDNAMES**
+Group Project for University Bern by Christian Gafner[21-917-075], Julien Chopin[21-916-846], Alexander Mlekus [17-118-753], Massimiliano Vella [20-117-594]
