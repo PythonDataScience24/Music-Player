@@ -38,3 +38,18 @@ class MusicDatabase:
         
         df = pd.DataFrame(data= data)
         return df
+
+
+if __name__ == "__main__":
+    # Code inside this block will only execute when the script is run directly
+    music_db = MusicDatabase()
+
+    # Add multiple songs
+    num_songs = int(input("Enter the number of songs you want to add: "))
+    for _ in range(num_songs):
+        music_db.add_song()
+
+    # Create DataFrame
+    music_df = music_db.create_dataframe()
+    print("\nDataFrame created:")
+    print(music_df)
