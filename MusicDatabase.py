@@ -1,6 +1,13 @@
 from Music import Music
 import pandas as pd
 
+# to dos:
+# create a way to play the songs
+# filtering options
+# skip and rewind options
+# amplifying of songs
+# eq's (?)
+# maybe even implement the album covers? user must upload .jpg/.png file themselves --> else if they dont do that add a placeholder
 
 class MusicDatabase:
     # initialize a list to temporary store the needed information to create a dataframe
