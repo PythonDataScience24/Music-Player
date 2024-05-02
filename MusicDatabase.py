@@ -20,13 +20,15 @@ class MusicDatabase:
     def get_user_input(self):
         """Prompts the user for song information and performs basic validation."""
         title = input("Enter title: ")
+        # make sure that it is not empty
         if not title:
             print("Title cannot be empty.")
             return None
-
+        # get further information
         artist = input("Enter artist name: ")
         genre = input("Enter genre: ")
         year = input("Enter year (leave blank if unknown): ")
+        # make sure that the year is an int, so that the data manipulation is easier
         try:
             year = int(year) if year else None  # Convert to int if provided
         except ValueError:
