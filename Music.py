@@ -1,10 +1,10 @@
 ### we store all the information of how the music needs to be structured here. isolated class for clarity:
 class Music:
     """this class represents one song and all the info this object can carry """
-    def __init__ (self, title, artistName, genre, date, album, path):
+    def __init__ (self, title, artist, genre, year, album, file_path):
         self.title = title
-        self.artistName = artistName
+        self.artist = artist
         self.genre = genre
-        self.date = date
+        self.year = year
         self.album = album
-        self.path = path
+        self.file_path = file_path
