@@ -49,6 +49,12 @@ class MusicDatabase:
             new_song = Music(title, artist, genre, year, album, file_path)
             self.music_library.append(new_song)
 
+    def remove_song(self):
+        """TODO: Remove a song from the music library."""
+        #title = input("Enter the title of the song to remove: ")
+        #self.music_library = [song for song in self.music_library if song.title != title]
+
+
     def create_dataframe(self):
         """Creates a DataFrame from the Music objects in the library."""
         data = [
@@ -57,3 +63,16 @@ class MusicDatabase:
             for song in self.music_library
         ]
         return pd.DataFrame(data)
+    
+    def save_dataframe(self, df):
+        """TODO: Saves the DataFrame to a CSV file."""
+        #df.to_csv("music_library.csv", index=False)
+
+    def load_dataframe(self):
+        """TODO: Load the DataFrame from a CSV file."""
+        #return pd.read_csv("music_library.csv")
+
+    def get_song(self, id):
+        """TODO: Retrieve a song from the library by its ID."""
+        #return song.title, song.artist, song.genre, song.year, song.album, song.file_path
+

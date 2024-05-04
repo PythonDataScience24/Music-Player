@@ -1,6 +1,9 @@
 import tkinter as tk
 import customtkinter as ctk
 
+#pip install customtkinter
+
+
 
 #This script creates a basic GUI to display and manage the list of songs and control the playback.
 #At this point, the list is static and the buttons do not have any functionality yet.
