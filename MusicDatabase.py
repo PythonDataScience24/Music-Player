@@ -15,17 +15,34 @@ from dataframeManipulation import filter_dataframe
 class MusicDatabase:
     # initialize a list to temporary store the needed information to create a dataframe
     def __init__ (self):
-        self.music_library = self.create_dataframe()
+        self.music_library = self.load_dataframe()
         self.create_csv_file()
 
 
-    # set up the dataframe:
-    def create_dataframe(self):
-        """Creates an empty DataFrame library."""
-        columns = ['id', 'title', 'artist', 'genre', 'year', 'album', 'file_path']
-        df = pd.DataFrame(columns=columns)
-        return df
-    
+    # load the dataframe if possible and if not then create a dataframe
+    def load_dataframe(self):
+        """loades the most recent version of the dataframe
+
+        Returns:
+            pandas dataframe: the current version of the pandas dataframe that stores the songs
+        """
+        try:
+        # Load the DataFrame from the CSV file
+            df = pd.read_csv("music_library.csv")
+            return df
+        except FileNotFoundError:
+            # If the file doesn't exist, return an empty DataFrame with defined columns
+            return pd.DataFrame(columns=["ID", "Title", "Artist", "Genre", "Year", "Album", "File_Path"])
+
+    # save the dataframe --> use to save the newest version after adding or removing the songs
+    def save_dataframe(self, df):
+        """ Save the dataframe to a .csv file so that we can save the most recent state of the dataframe
+
+        Args:
+            df (pandas dataframe): music library dataframe
+        """
+        df.to_csv("music_library.csv", index=False)
+
     # create csv file or not if it already exists
     def create_csv_file(self):
         """Creates an empty music_library.csv file if it doesn't exist."""
@@ -63,7 +80,9 @@ class MusicDatabase:
         # Save the updated DataFrame to the CSV file (important to persist changes)
         self.save_dataframe(self.music_library)
 
-        print("Song added successfully!")
+        addMore = input("do you want to add another song: y/n")
+        if addMore == 'y':
+            self.add_song()
 
     def get_user_input(self):
         """Prompts the user for song information and performs basic validation."""
@@ -98,29 +117,6 @@ class MusicDatabase:
         """
         self.music_library = self.music_library[self.music_library['Title'] != title]
         self.save_dataframe(self.music_library)
-    
-    def save_dataframe(self, df):
-        """ Save the dataframe to a .csv file so that we can save the most recent state of the dataframe
-
-        Args:
-            df (pandas dataframe): music library dataframe
-        """
-        df.to_csv("music_library.csv", index=False)
-
-    def load_dataframe(self):
-        """loades the most recent version of the dataframe
-
-        Returns:
-            pandas dataframe: the current version of the pandas dataframe that stores the songs
-        """
-        try:
-        # Load the DataFrame from the CSV file
-            df = pd.read_csv("music_library.csv")
-            return df
-        except FileNotFoundError:
-            # If the file doesn't exist, return an empty DataFrame with defined columns
-            return pd.DataFrame(columns=["ID", "Title", "Artist", "Genre", "Year", "Album", "File_Path"])
-
 
     def get_song(self, id):
         """search for a specific song depending on the id passed throuh
