@@ -15,7 +15,8 @@ from dataframeManipulation import filter_dataframe
 class MusicDatabase:
     # initialize a list to temporary store the needed information to create a dataframe
     def __init__ (self):
-        self.music_library = []
+        self.music_library = self.load_dataframe()
+
 
     def get_user_input(self):
         """Prompts the user for song information and performs basic validation."""
@@ -24,10 +25,12 @@ class MusicDatabase:
         if not title:
             print("Title cannot be empty.")
             return None
+        
         # get further information
         artist = input("Enter artist name: ")
         genre = input("Enter genre: ")
         year = input("Enter year (leave blank if unknown): ")
+
         # make sure that the year is an int, so that the data manipulation is easier
         try:
             year = int(year) if year else None  # Convert to int if provided
@@ -46,33 +49,84 @@ class MusicDatabase:
         user_input = self.get_user_input()
         if user_input:
             title, artist, genre, year, album, file_path = user_input
+            new_id = len(self.music_library) + 1  # generate ID for song
             new_song = Music(title, artist, genre, year, album, file_path)
-            self.music_library.append(new_song)
+            self.music_library = self.music_library.append(pd.DataFrame([{
+                "ID": new_id,
+                "Title": new_song.title,
+                "Artist": new_song.artist,
+                "Genre": new_song.genre,
+                "Year": new_song.year,
+                "Album": new_song.album,
+                "File_Path": new_song.file_path
+            }]), ignore_index=True)
+            self.save_dataframe(self.music_library)
 
-    def remove_song(self):
-        """TODO: Remove a song from the music library."""
-        #title = input("Enter the title of the song to remove: ")
-        #self.music_library = [song for song in self.music_library if song.title != title]
+    def remove_song(self, title):
+        """removes song from dataframe and saves the current dataframe after removing
+
+        Args:
+            title (string): title of the song to be removed
+        """
+        self.music_library = self.music_library[self.music_library['Title'] != title]
+        self.save_dataframe(self.music_library)
 
 
     def create_dataframe(self):
         """Creates a DataFrame from the Music objects in the library."""
         data = [
-            {"Title": song.title, "Artist": song.artist, "Genre": song.genre,
-             "Year": song.year, "Album": song.album, "File_Path": song.file_path}
-            for song in self.music_library
+            {"ID": i + 1,  # Adding 1 to make IDs start from 1
+             "Title": song.title, 
+             "Artist": song.artist, 
+             "Genre": song.genre,
+             "Year": song.year, 
+             "Album": song.album, 
+             "File_Path": song.file_path}
+            for i, song in enumerate(self.music_library)
         ]
         return pd.DataFrame(data)
     
+    
+    def remove_song (self, title):
+        self.music_library = self.music_library[self.music_library['Title'] != title]
+        return self.save_dataframe (self.music_library)
+    
     def save_dataframe(self, df):
-        """TODO: Saves the DataFrame to a CSV file."""
-        #df.to_csv("music_library.csv", index=False)
+        """ Save the dataframe to a .csv file so that we can save the most recent state of the dataframe
+
+        Args:
+            df (pandas dataframe): music library dataframe
+        """
+        df.to_csv("music_library.csv", index=False)
 
     def load_dataframe(self):
         """TODO: Load the DataFrame from a CSV file."""
-        #return pd.read_csv("music_library.csv")
+        try:
+            return pd.read_csv("music_library.csv")
+        except:
+            return pd.DataFrame()
+
 
     def get_song(self, id):
-        """TODO: Retrieve a song from the library by its ID."""
-        #return song.title, song.artist, song.genre, song.year, song.album, song.file_path
+        """search for a specific song depending on the id passed throuh
 
+        Args:
+            id (int): id that is specific to the song searched for
+
+        Returns:
+            dict or None: A dictionary containing the information of the song if found,
+            with keys "ID", "Title", "Artist", "Genre", "Year", "Album", and "File_Path".
+            Returns None if the song with the specified ID is not found.
+        """
+        song = self.music_library[self.music_library['ID'] == id]
+        if not song.empty:
+            return {
+                "Title": song['Title'].iloc[0],
+                "Artist": song['Artist'].iloc[0],
+                "Genre": song['Genre'].iloc[0],
+                "Year": song['Year'].iloc[0],
+                "Album": song['Album'].iloc[0],
+                "File_Path": song['File_Path'].iloc[0]
+            }
+        else:
+            return None
