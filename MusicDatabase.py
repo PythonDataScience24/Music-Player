@@ -15,8 +15,46 @@ from dataframeManipulation import filter_dataframe
 class MusicDatabase:
     # initialize a list to temporary store the needed information to create a dataframe
     def __init__ (self):
-        self.music_library = self.load_dataframe()
+        self.music_library = self.create_dataframe()
+        self.create_csv_file()
 
+
+    # set up the dataframe:
+    def create_dataframe(self):
+        """Creates an empty DataFrame library."""
+        columns = ['id', 'title', 'artist', 'genre', 'year', 'album', 'file_path']
+        df = pd.DataFrame(columns=columns)
+        return df
+    
+    # create csv file or not if it already exists
+    def create_csv_file(self):
+        """Creates an empty music_library.csv file if it doesn't exist."""
+        try:
+            with open("music_library.csv", 'x'):
+                pass  # Create the file if it doesn't exist
+        except FileExistsError:
+            pass  # File already exists, do nothing
+    
+    # add a song to the library
+    def add_song(self):
+        """Add a new song to the music library."""
+        user_input = self.get_user_input()
+        if user_input:
+            title, artist, genre, year, album, file_path = user_input
+            new_id = len(self.music_library) + 1  # Generate ID for song
+            new_song_data = {
+                "id": new_id,
+                "title": title,
+                "artist": artist,
+                "genre": genre,
+                "year": year,
+                "album": album,
+                "file_path": file_path
+            }
+            # Append the new song data to the music library DataFrame
+            self.music_library = self.music_library.append(new_song_data, ignore_index=True)
+            # Save the updated DataFrame
+            self.save_dataframe(self.music_library)
 
     def get_user_input(self):
         """Prompts the user for song information and performs basic validation."""
@@ -44,52 +82,13 @@ class MusicDatabase:
         # Additional checks for file existence could be added here
         return title, artist, genre, year, album, file_path
 
-    def add_song(self): #TODO probably best if function can be called with a Music object as argument.
-        """use user input to save a song and create a Music Object"""
-        user_input = self.get_user_input()
-        if user_input:
-            title, artist, genre, year, album, file_path = user_input
-            new_id = len(self.music_library) + 1  # generate ID for song
-            new_song = Music(title, artist, genre, year, album, file_path)
-            self.music_library = self.music_library.append(pd.DataFrame([{
-                "ID": new_id,
-                "Title": new_song.title,
-                "Artist": new_song.artist,
-                "Genre": new_song.genre,
-                "Year": new_song.year,
-                "Album": new_song.album,
-                "File_Path": new_song.file_path
-            }]), ignore_index=True)
-            self.save_dataframe(self.music_library)
-
-    def remove_song(self, title): #TODO delete by id instead of title
+    def remove_song(self, title):
         """removes song from dataframe and saves the current dataframe after removing
-
         Args:
             title (string): title of the song to be removed
         """
         self.music_library = self.music_library[self.music_library['Title'] != title]
         self.save_dataframe(self.music_library)
-
-
-    def create_dataframe(self):
-        """Creates a DataFrame from the Music objects in the library."""
-        data = [
-            {"ID": i + 1,  # Adding 1 to make IDs start from 1
-             "Title": song.title, 
-             "Artist": song.artist, 
-             "Genre": song.genre,
-             "Year": song.year, 
-             "Album": song.album, 
-             "File_Path": song.file_path}
-            for i, song in enumerate(self.music_library)
-        ]
-        return pd.DataFrame(data)
-    
-    
-    def remove_song (self, title):
-        self.music_library = self.music_library[self.music_library['Title'] != title]
-        return self.save_dataframe (self.music_library)
     
     def save_dataframe(self, df):
         """ Save the dataframe to a .csv file so that we can save the most recent state of the dataframe
@@ -106,9 +105,12 @@ class MusicDatabase:
             pandas dataframe: the current version of the pandas dataframe that stores the songs
         """
         try:
-            return pd.read_csv("music_library.csv")
-        except:
-            return pd.DataFrame()
+        # Load the DataFrame from the CSV file
+            df = pd.read_csv("music_library.csv")
+            return df
+        except FileNotFoundError:
+            # If the file doesn't exist, return an empty DataFrame with defined columns
+            return pd.DataFrame(columns=["ID", "Title", "Artist", "Genre", "Year", "Album", "File_Path"])
 
 
     def get_song(self, id):
