@@ -13,11 +13,13 @@ from dataframeManipulation import filter_dataframe
 # maybe even implement the album covers? user must upload .jpg/.png file themselves --> else if they dont do that add a placeholder
 
 class MusicDatabase:
+
+    ## everything regarding the creation of the dataframe and the saving into a .csv file
+
     # initialize a list to temporary store the needed information to create a dataframe
     def __init__ (self):
         self.music_library = self.load_dataframe()
         self.create_csv_file()
-
 
     # load the dataframe if possible and if not then create a dataframe
     def load_dataframe(self):
@@ -32,7 +34,7 @@ class MusicDatabase:
             return df
         except FileNotFoundError:
             # If the file doesn't exist, return an empty DataFrame with defined columns
-            return pd.DataFrame(columns=["ID", "Title", "Artist", "Genre", "Year", "Album", "File_Path"])
+            return pd.DataFrame(columns=['id', 'title', 'artist', 'genre', 'year', 'album', 'file_path'])
 
     # save the dataframe --> use to save the newest version after adding or removing the songs
     def save_dataframe(self, df):
@@ -52,6 +54,9 @@ class MusicDatabase:
         except FileExistsError:
             pass  # File already exists, do nothing
     
+    
+    # every function regarding changing the dataframe, like adding and removing songs
+
     # add a song to the library
     def add_song(self):
         """Add a new song to the music library."""
@@ -115,7 +120,7 @@ class MusicDatabase:
         Args:
             title (string): title of the song to be removed
         """
-        self.music_library = self.music_library[self.music_library['Title'] != title]
+        self.music_library = self.music_library[self.music_library['title'] != title]
         self.save_dataframe(self.music_library)
 
     def get_song(self, id):
@@ -129,15 +134,15 @@ class MusicDatabase:
             with keys "ID", "Title", "Artist", "Genre", "Year", "Album", and "File_Path".
             Returns None if the song with the specified ID is not found.
         """
-        song = self.music_library[self.music_library['ID'] == id]
+        song = self.music_library[self.music_library['id'] == id]
         if not song.empty:
             return {
-                "Title": song['Title'].iloc[0],
-                "Artist": song['Artist'].iloc[0],
-                "Genre": song['Genre'].iloc[0],
-                "Year": song['Year'].iloc[0],
-                "Album": song['Album'].iloc[0],
-                "File_Path": song['File_Path'].iloc[0]
+                "title": song['title'].iloc[0],
+                "artist": song['artist'].iloc[0],
+                "genre": song['genre'].iloc[0],
+                "year": song['year'].iloc[0],
+                "album": song['album'].iloc[0],
+                "file_path": song['file_path'].iloc[0]
             }
         else:
             return None
