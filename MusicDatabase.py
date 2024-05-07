@@ -38,23 +38,32 @@ class MusicDatabase:
     # add a song to the library
     def add_song(self):
         """Add a new song to the music library."""
-        user_input = self.get_user_input()
-        if user_input:
-            title, artist, genre, year, album, file_path = user_input
-            new_id = len(self.music_library) + 1  # Generate ID for song
-            new_song_data = {
-                "id": new_id,
-                "title": title,
-                "artist": artist,
-                "genre": genre,
-                "year": year,
-                "album": album,
-                "file_path": file_path
-            }
-            # Append the new song data to the music library DataFrame
-            self.music_library = self.music_library.append(new_song_data, ignore_index=True)
-            # Save the updated DataFrame
-            self.save_dataframe(self.music_library)
+    # Get user input with validation
+        song_info = self.get_user_input()
+        if not song_info:
+            return  # User cancelled or invalid input
+        # Unpack the validated song information
+        title, artist, genre, year, album, file_path = song_info
+
+        # Create a dictionary with the song information
+        new_song = {'id': None,  # Will be assigned automatically by most databases
+             'title': title,
+             'artist': artist,
+             'genre': genre,
+             'year': year,
+             'album': album,
+             'file_path': file_path}
+
+       # add  new song as a row to the existing DataFrame
+        self.music_library = pd.concat([self.music_library, pd.DataFrame(new_song, index=[0])], ignore_index=True)
+
+        # Assign the row index (new ID) to the 'id' column
+        self.music_library['id'] = self.music_library.index
+
+        # Save the updated DataFrame to the CSV file (important to persist changes)
+        self.save_dataframe(self.music_library)
+
+        print("Song added successfully!")
 
     def get_user_input(self):
         """Prompts the user for song information and performs basic validation."""
