@@ -4,7 +4,6 @@ import customtkinter as ctk
 #pip install customtkinter
 
 #import pd
-import pandas as pd
 
 from Music import Music
 import MusicDatabase
@@ -16,7 +15,8 @@ import MusicDatabase
 
 #Define custom widgets
 class ScrollableListbox(tk.Frame):
-    def __init__(self, parent, df: pd.DataFrame,  *args, **kwargs):
+
+    def __init__(self, parent, musicDB: MusicDatabase.MusicDatabase,  *args, **kwargs):
         tk.Frame.__init__(self, parent, *args, **kwargs)
         self.scrollbar = tk.Scrollbar(self)
         self.listbox = tk.Listbox(self, yscrollcommand=self.scrollbar.set)
@@ -26,17 +26,18 @@ class ScrollableListbox(tk.Frame):
         self.listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.listbox.bind("<Double-1>", self.on_double_click)
 
-        self.df = df
-        self.identifiers = []
-        self.update_listbox(df)
+        self.musicDB = musicDB
 
-    def update_listbox(self, df):
+        self.update_listbox()
+
+    def update_listbox(self):
         self.listbox.delete(0, tk.END)
-        self.identifiers.clear()
-        self.df = df
-        for item in self.df.values:
-            self.listbox.insert(tk.END, item.title)
-            self.identifiers.append(item.id)
+
+        self.library = self.musicDB.get_musicLibrary()
+
+        if (len(self.library) > 0):
+            for song in self.library:
+                self.listbox.insert(tk.END, song.title)
 
     """ def add_item(self, item):
         self.listbox.insert(tk.END, item)
@@ -48,14 +49,13 @@ class ScrollableListbox(tk.Frame):
         #return the identifier of the selected
         index = self.listbox.curselection()
         if index:  # if there is a selection
-            return index[0]
+            return self.library[index[0]] # return the song at index
         else:
             return None
     
     def on_double_click(self, event):
         index = self.listbox.nearest(event.y)
-        identifier = self.identifiers[index]
-        song = MusicDatabase.get_song(identifier)
+        song = self.library[index]
         print(f"You double-clicked {song}!")
     
 
@@ -86,7 +86,7 @@ class  App(tk.Tk):
         self.musicDB = MusicDatabase.MusicDatabase()
 
 
-        self.listview = ScrollableListbox(self, self.musicDB.load_dataframe())
+        self.listview = ScrollableListbox(self, self.musicDB)
         self.listview.place(relx=0.1, rely=0.1, relwidth=0.8)
 
         #add some items to the list view
@@ -128,6 +128,7 @@ class  App(tk.Tk):
             def confirm_delete():
                 #self.listview.remove_item(selected_item)
                 self.musicDB.remove_song(selected_item.id)
+                self.listview.update_listbox()
                 popup.destroy()
 
             popup = tk.Toplevel()
@@ -146,18 +147,42 @@ class  App(tk.Tk):
     def add_item_with_popup(self):
 
         def add_item():
-            new_item = entry.get()
-            if new_item:  # Only add if the entry is not empty
-                self.listview.add_item(new_item)
-                self.musicDB.add_song(new_item)
+            song = Music(title.get(), artist.get(), genre.get(), year.get(), album.get(), file_path.get())
+
+            
+            self.musicDB.add_song()
+            self.listview.update_listbox()
             popup.destroy()
+            
+
 
         popup = tk.Toplevel()
         #popup.overrideredirect(True)
         popup.title("Add Item")
 
-        entry = tk.Entry(popup)
-        entry.pack()
+
+        #create entries for song = Music(title.get(), artist.get(), genre.get(), year.get(), album.get(), file_path.get())
+        
+        def add_labels_and_entries(text):
+            frame = tk.Frame(popup)
+            frame.pack()
+
+            label = tk.Label(frame, text=text)
+            label.pack(side=tk.LEFT)
+
+            entry = tk.Entry(frame)
+            entry.pack(side=tk.RIGHT)
+
+            return entry
+
+        title = add_labels_and_entries("Title")
+        artist = add_labels_and_entries("Artist")
+        genre = add_labels_and_entries("Genre")
+        year = add_labels_and_entries("Year")
+        album = add_labels_and_entries("Album")
+        file_path = add_labels_and_entries("File Path")
+
+        
 
         add_button = ctk.CTkButton(popup, text="Add", command=add_item)
         add_button.pack()
