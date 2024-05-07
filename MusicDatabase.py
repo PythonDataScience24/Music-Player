@@ -100,7 +100,11 @@ class MusicDatabase:
         df.to_csv("music_library.csv", index=False)
 
     def load_dataframe(self):
-        """TODO: Load the DataFrame from a CSV file."""
+        """loades the most recent version of the dataframe
+
+        Returns:
+            pandas dataframe: the current version of the pandas dataframe that stores the songs
+        """
         try:
             return pd.read_csv("music_library.csv")
         except:
