@@ -3,10 +3,11 @@ import customtkinter as ctk
 
 #pip install customtkinter
 
+#import pd
+import pandas as pd
 
 from Music import Music
-from MusicDatabase import add_song, remove_song
-
+import MusicDatabase
 
 #This script creates a basic GUI to display and manage the list of songs and control the playback.
 #At this point, the list is static and the buttons do not have any functionality yet.
@@ -15,7 +16,7 @@ from MusicDatabase import add_song, remove_song
 
 #Define custom widgets
 class ScrollableListbox(tk.Frame):
-    def __init__(self, parent, *args, **kwargs):
+    def __init__(self, parent, df: pd.DataFrame,  *args, **kwargs):
         tk.Frame.__init__(self, parent, *args, **kwargs)
         self.scrollbar = tk.Scrollbar(self)
         self.listbox = tk.Listbox(self, yscrollcommand=self.scrollbar.set)
@@ -25,19 +26,37 @@ class ScrollableListbox(tk.Frame):
         self.listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.listbox.bind("<Double-1>", self.on_double_click)
 
-    def add_item(self, item):
+        self.df = df
+        self.identifiers = []
+        self.update_listbox(df)
+
+    def update_listbox(self, df):
+        self.listbox.delete(0, tk.END)
+        self.identifiers.clear()
+        self.df = df
+        for item in self.df.values:
+            self.listbox.insert(tk.END, item.title)
+            self.identifiers.append(item.id)
+
+    """ def add_item(self, item):
         self.listbox.insert(tk.END, item)
 
     def remove_item(self, item):
-        self.listbox.delete(self.listbox.get(0, tk.END).index(item))
+        self.listbox.delete(self.listbox.get(0, tk.END).index(item)) """
 
     def get_selected(self):
-        return self.listbox.get(tk.ACTIVE)
+        #return the identifier of the selected
+        index = self.listbox.curselection()
+        if index:  # if there is a selection
+            return index[0]
+        else:
+            return None
     
     def on_double_click(self, event):
         index = self.listbox.nearest(event.y)
-        item = self.listbox.get(index)
-        print(f"You double-clicked {item}!")
+        identifier = self.identifiers[index]
+        song = MusicDatabase.get_song(identifier)
+        print(f"You double-clicked {song}!")
     
 
 class CustomProgressBar(tk.Frame):
@@ -64,12 +83,14 @@ class  App(tk.Tk):
         self.geometry("800x600")
         self.title("Custom Tkinter")
 
-        self.listview = ScrollableListbox(self)
+        self.musicDB = MusicDatabase.MusicDatabase()
+
+
+        self.listview = ScrollableListbox(self, self.musicDB.load_dataframe())
         self.listview.place(relx=0.1, rely=0.1, relwidth=0.8)
 
         #add some items to the list view
-        self.listview.add_item("Song 1 - Artist 1 - Album 1 - 3:00")
-        self.listview.add_item("Song 2 - Artist 2 - Album 2 - 4:00")
+        #self.musicDB.add_song("Song1")
 
         #add progressbar to bottom
         self.progressbar = CustomProgressBar(self)
@@ -105,7 +126,8 @@ class  App(tk.Tk):
             selected_item = self.listview.get_selected()
 
             def confirm_delete():
-                self.listview.remove_item(selected_item)
+                #self.listview.remove_item(selected_item)
+                self.musicDB.remove_song(selected_item.id)
                 popup.destroy()
 
             popup = tk.Toplevel()
@@ -127,6 +149,7 @@ class  App(tk.Tk):
             new_item = entry.get()
             if new_item:  # Only add if the entry is not empty
                 self.listview.add_item(new_item)
+                self.musicDB.add_song(new_item)
             popup.destroy()
 
         popup = tk.Toplevel()
@@ -141,6 +164,13 @@ class  App(tk.Tk):
 
         cancel_button = ctk.CTkButton(popup, text="Cancel", command=popup.destroy)
         cancel_button.pack()
+
+
+    def updateView(self):
+
+
+
+        pass
 
 
 
