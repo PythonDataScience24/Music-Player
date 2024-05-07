@@ -44,7 +44,7 @@ class MusicDatabase:
         # Additional checks for file existence could be added here
         return title, artist, genre, year, album, file_path
 
-    def add_song(self):
+    def add_song(self): #TODO add arguments or new function so add_song can be called with the information given as arguments. f.e. add_song("title", "artist", "genre", "year", "album", "file_path")
         """use user input to save a song and create a Music Object"""
         user_input = self.get_user_input()
         if user_input:
@@ -62,7 +62,7 @@ class MusicDatabase:
             }]), ignore_index=True)
             self.save_dataframe(self.music_library)
 
-    def remove_song(self, title):
+    def remove_song(self, title): #TODO delete by id instead of title
         """removes song from dataframe and saves the current dataframe after removing
 
         Args:
