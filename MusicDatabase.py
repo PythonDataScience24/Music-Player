@@ -120,7 +120,7 @@ class MusicDatabase:
         addMore = input("do you want to add another song: y/n")
         if addMore == 'y':
             self.add_song()
-        '''
+        
 
     def get_user_input(self):
         """Prompts the user for song information and performs basic validation."""
@@ -147,14 +147,36 @@ class MusicDatabase:
 
         # Additional checks for file existence could be added here
         return title, artist, genre, year, album, file_path
+        '''
 
-    def remove_song(self, title):
+    def remove_song(self, id):
         """removes song from dataframe and saves the current dataframe after removing
         Args:
             title (string): title of the song to be removed
         """
-        self.music_library = self.music_library[self.music_library['title'] != title]
+        self.music_library = self.music_library[self.music_library['id'] != id]
         self.save_dataframe(self.music_library)
+
+    def get_library(self):
+        """
+        Retrieve an array of Song objects representing the songs in the music library DataFrame.
+
+        Returns:
+            List[Song]: An array of Song objects.
+        """
+        library = []
+        for index, row in self.music_library.iterrows():
+            song = Song(
+                row['title'],
+                row['artist'],
+                row['genre'],
+                row['year'],
+                row['album'],
+                row['file_path'],
+                row['id']
+            )
+            library.append(song)
+        return library
 
     def get_song(self, id):
         """search for a specific song depending on the id passed throuh
