@@ -1,5 +1,14 @@
+'''
+Hist: 
+* 20240508 JC: 
+    * implementation of Music.song to create for dataFrame
+    * load_dataframe now creates a new dataFrame if before non existent
+    * ID's are now given uniquely and never change, even if songs added or removed
+'''
+
 import pandas as pd
-from Music import Music
+import csv
+from Music import Song
 from dataframeManipulation import filter_dataframe
 
 # in this file we set up the database/dataframe and save it. This will be the anchor point of the other files/functions
@@ -18,8 +27,8 @@ class MusicDatabase:
 
     # initialize a list to temporary store the needed information to create a dataframe
     def __init__ (self):
+        self.dummy_song = Song("", "", "", "", "", "", None)  # Create a dummy Song instance
         self.music_library = self.load_dataframe()
-        self.create_csv_file()
 
     # load the dataframe if possible and if not then create a dataframe
     def load_dataframe(self):
@@ -30,11 +39,12 @@ class MusicDatabase:
         """
         try:
         # Load the DataFrame from the CSV file
-            df = pd.read_csv("music_library.csv")
-            return df
+            return pd.read_csv("music_library.csv")
         except FileNotFoundError:
-            # If the file doesn't exist, return an empty DataFrame with defined columns
-            return pd.DataFrame(columns=['id', 'title', 'artist', 'genre', 'year', 'album', 'file_path'])
+            # If the file doesn't exist, create empty DataFrame with defined columns
+            self.create_csv_file()
+            return pd.read_csv("music_library.csv")
+
 
     # save the dataframe --> use to save the newest version after adding or removing the songs
     def save_dataframe(self, df):
@@ -47,18 +57,40 @@ class MusicDatabase:
 
     # create csv file or not if it already exists
     def create_csv_file(self):
-        """Creates an empty music_library.csv file if it doesn't exist."""
+        """Creates an empty music_library.csv file with headers based on the attributes of the Song class."""
+        headers = vars(self.dummy_song).keys()  # Get attributes of the dummy Song instance
         try:
-            with open("music_library.csv", 'x'):
-                pass  # Create the file if it doesn't exist
+            with open("music_library.csv", 'x', newline='') as file:
+                writer = csv.DictWriter(file, fieldnames=headers)
+                writer.writeheader()
         except FileExistsError:
-            pass  # File already exists, do nothing
+            # Check if the file is empty
+            with open("music_library.csv", 'r') as file:
+                if not file.read(1):
+                    # File is empty, write headers
+                    with open("music_library.csv", 'w', newline='') as file:
+                        writer = csv.DictWriter(file, fieldnames=headers)
+                        writer.writeheader()
     
     
     # every function regarding changing the dataframe, like adding and removing songs
 
     # add a song to the library
-    def add_song(self):
+    def add_song(self, song: Song):
+
+        if len(self.music_library) > 0:
+            song.id = self.music_library['id'].max() + 1
+        else:
+            song.id = 1
+
+         # Append the song information to the DataFrame
+        self.music_library = self.music_library.append(vars(song), ignore_index=True)
+        # Save the updated DataFrame
+        self.save_dataframe(self.music_library)
+
+        '''
+        Old Code
+        
         """Add a new song to the music library."""
     # Get user input with validation
         song_info = self.get_user_input()
@@ -88,6 +120,7 @@ class MusicDatabase:
         addMore = input("do you want to add another song: y/n")
         if addMore == 'y':
             self.add_song()
+        '''
 
     def get_user_input(self):
         """Prompts the user for song information and performs basic validation."""
