@@ -18,10 +18,10 @@ Methods:
 
 class Song:
     def __init__ (self, title, artist, genre, year, album, file_path, id = None):
-        self.id = id
         self.title = title
         self.artist = artist
         self.genre = genre
         self.year = year
         self.album = album
         self.file_path = file_path
+        self.id = id
