@@ -59,10 +59,10 @@ class ScrollableListbox(tk.Frame):
     def update_listbox(self):
         self.listbox.delete(0, tk.END)
 
-        #self.library = self.musicDB.get_library()
+        self.library = self.musicDB.get_library()
 
         #temporary library
-        self.library = [Song("Song1", "Artist1", "Genre1", 2021, "Album1", "path1"), Song("Song2", "Artist2", "Genre2", 2022, "Album2", "path2")]
+        #self.library = [Song("Song1", "Artist1", "Genre1", 2021, "Album1", "path1"), Song("Song2", "Artist2", "Genre2", 2022, "Album2", "path2")]
 
         #do a for loop that does self.musicDB.get_length() times. if 0 times, it will not do anything
         for song in self.library:
@@ -134,7 +134,7 @@ class SongPlayer(tk.Frame):
             tk.Frame.__init__(self, parent, *args, **kwargs)
 
             self.song = None
-            self.musicDB = parent.musicDB
+            self.parent = parent
 
             #add progressbar to bottom
             self.progressbar = CustomProgressBar(self)
@@ -219,8 +219,8 @@ class SongPlayer(tk.Frame):
 
             def confirm_delete():
                 #self.listview.remove_item(selected_item)
-                self.musicDB.remove_song(self.song.id)
-                self.listview.update_listbox()
+                self.parent.musicDB.remove_song(self.song.id)
+                self.parent.listview.update_listbox()
                 popup.destroy()
 
             popup = tk.Toplevel()
@@ -242,8 +242,8 @@ class SongPlayer(tk.Frame):
             def add_item():
                 song = Song(title.get(), artist.get(), genre.get(), year.get(), album.get(), file_path.get(), None)
 
-                self.musicDB.add_song(song)# needs to add possiblity to add arguments
-                self.listview.update_listbox()
+                self.parent.musicDB.add_song(song)# needs to add possiblity to add arguments
+                self.parent.listview.update_listbox()
                 popup.destroy()
                 
 
