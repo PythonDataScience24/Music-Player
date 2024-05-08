@@ -1,7 +1,7 @@
 import tkinter as tk
 import customtkinter as ctk
 
-from Music import Music
+from Music import Song
 import MusicDatabase
 
 #pip install customtkinter
@@ -62,7 +62,7 @@ class ScrollableListbox(tk.Frame):
         #self.library = self.musicDB.get_library()
 
         #temporary library
-        self.library = [Music("Song1", "Artist1", "Genre1", 2021, "Album1", "path1"), Music("Song2", "Artist2", "Genre2", 2022, "Album2", "path2")]
+        self.library = [Song("Song1", "Artist1", "Genre1", 2021, "Album1", "path1"), Song("Song2", "Artist2", "Genre2", 2022, "Album2", "path2")]
 
         #do a for loop that does self.musicDB.get_length() times. if 0 times, it will not do anything
         for song in self.library:
@@ -167,7 +167,7 @@ class SongPlayer(tk.Frame):
             self.progressbar.grid(row=4, column=0, columnspan=6)
     
 
-        def select_song(self, song: Music):
+        def select_song(self, song: Song):
             self.song = song
             self.titleLabel.configure(text=song.title)
             self.artistLabel.configure(text=song.artist)
@@ -240,9 +240,9 @@ class SongPlayer(tk.Frame):
         def add_item_with_popup(self):
 
             def add_item():
-                song = Music(title.get(), artist.get(), genre.get(), year.get(), album.get(), file_path.get())
+                song = Song(title.get(), artist.get(), genre.get(), year.get(), album.get(), file_path.get(), None)
 
-                self.musicDB.add_song()# needs to add possiblity to add arguments
+                self.musicDB.add_song(song)# needs to add possiblity to add arguments
                 self.listview.update_listbox()
                 popup.destroy()
                 
