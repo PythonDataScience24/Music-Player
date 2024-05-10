@@ -137,6 +137,8 @@ class MusicDatabase:
         Args:
             id (int): The ID of the song to be removed.
         '''
+        # create an int out of the string that is passed through, so that the comparison works properly
+        id = int(id)
         self.music_library = self.music_library[self.music_library['id'] != id]
         self.save_dataframe(self.music_library)
 

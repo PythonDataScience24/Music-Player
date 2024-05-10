@@ -26,7 +26,7 @@ def testWorkflow ():
 
         # Print the entire dataframe to verify the song was added
         print(music_db.music_library)
-        songToRemove = input('what song do you want to remove: ')
+        songToRemove = input('Enter the ID of the song you want to remove: ')
         music_db.remove_song(songToRemove)
         print(music_db.music_library)
 

@@ -18,10 +18,13 @@ paused = False     #Flag to check if the song is paused
 
 def play_song(song: mdb.Song):
     global paused, current_position
+    #check if the state of paused is false if it is so then we play the song
     if paused:
         sd.play(song.audio_data, song.sample_rate, start=int(current_position * song.sample_rate))
         paused = False
     else:
+        # Read audio data from file and assign it to song.audio_data
+        # Discard the sample rate returned by read() using the underscore 
         _, song.audio_data = read(song.file_path)
         song.sample_rate = DEFAULT_SAMPLE_RATE  # Set default sample rate
         sd.play(song.audio_data, song.sample_rate)
