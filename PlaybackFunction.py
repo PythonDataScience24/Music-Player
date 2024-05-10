@@ -1,43 +1,55 @@
 import MusicDatabase as mdb
-import pygame               #Library to play audio files (Da chönnt me oh eifch pygame.mixer bruche lol)
+import sounddevice as sd
+import numpy as np
+from scipy.io.wavfile import read
 
-pygame.mixer.init()         #Initialize the mixer module
-#pygame.mixer.music.set_endevent(pygame. ?? ) #Trigger an event when the music ends (next song for example)
+# Default sample rate for playback
+DEFAULT_SAMPLE_RATE = 44100
+
+# Current position of the song in seconds
+current_position = 0
+
+# Flag to check if the song is paused
+paused = False
 
 current_position = 0 #Current position of the song in seconds --> For a progress bar/slider (let the progress bar change this value? Or Let  user Input change it?)
 paused = False     #Flag to check if the song is paused
 
 
-def play_song(song: mdb.Song):      #Frage: Wie willst Du den Song übergeben? Als Objekt?
+def play_song(song: mdb.Song):
+    global paused, current_position
     if paused:
-        pygame.mixer.music.unpause()
+        sd.play(song.audio_data, song.sample_rate, start=int(current_position * song.sample_rate))
         paused = False
     else:
-        pygame.mixer.music.load(song.path)
-        pygame.mixer.music.play()
-        paused = False              #zur Sicherheit
+        _, song.audio_data = read(song.file_path)
+        song.sample_rate = DEFAULT_SAMPLE_RATE  # Set default sample rate
+        sd.play(song.audio_data, song.sample_rate)
+        paused = False
+    print("Now playing:", song.title)
 
 def pause_song():       #Hier kann pausiert oder fortgesetzt werden
     global paused
     if paused:
-        pygame.mixer.music.unpause()
+        sd.resume()
         paused = False
     else:
-        pygame.mixer.music.pause()
+        sd.pause()
         paused = True
 
 def stop_song():        
-    pygame.mixer.music.stop()
-    # pygame.mixer.music.unload() Hier vill. song rausnehmen?
+    sd.stop()
 
-def song_queue(song: mdb.Song):
-    # Hier jeweils den nächsten Song in die Queue einfügen? Oder ist das obsolet
+# def song_queue(song: mdb.Song):
+#     # Hier jeweils den nächsten Song in die Queue einfügen? Oder ist das obsolet
 
 # Position (in einer Progressbar) verändern - Achtung: geht nur für mp3
-def set_position(value : float):
+def set_position(song: mdb.Song, value : float):
     global current_position
-    current_position = int(value) / 100 * pygame.mixer.music.get_length()
-    pygame.mixer.music.set_pos(current_position) #Hier die Progressbar rein? Oder die Current position und die Progressbar verändert die current position?
+    current_position = value
+    if not paused:
+        sd.stop()
+        play_song(song)
 
 def next_song():
     pass
@@ -46,6 +58,19 @@ def previous_song():
     pass
 
 # To set the volume
-def volume(value : int):
-    volume = int(value) / 100               #pygame wants a value between 0 and 1 but the slider has a range from 0 to 100
-    pygame.mixer.music.set_volume(volume)
+def volume(song: mdb.Song, value : int):
+    # check the value if it is possible to amplify it that far 
+    #--> restriction so that the user cannot make misinputs --> ask the user how many percent they want to increase it
+    if value < 0 or value > 100:
+        raise ValueError("Volume value must be between 0 and 100.")
+    
+    # Convert volume percentage to a scale factor
+    scale_factor = value / 100.0
+    
+    # Amplify the audio data using numpy
+    song.audio_data = np.multiply(song.audio_data, scale_factor)
+
+    # If the song is currently playing, restart playback with the new volume
+    if not paused:
+        sd.stop()
+        play_song(song)

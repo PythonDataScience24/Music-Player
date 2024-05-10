@@ -11,9 +11,6 @@ Hist:
 import pandas as pd
 import csv
 from Song import Song
-from dataframeManipulation import filter_dataframe
-import sounddevice as sd
-from scipy.io.wavfile import read
 
 # in this file we set up the database/dataframe and save it. This will be the anchor point of the other files/functions
 
@@ -130,10 +127,6 @@ class MusicDatabase:
         song.year = input("Enter the release year (or leave blank): ")
         song.album = input("Enter the album name (or leave blank): ")
 
-            # Inform user if no metadata found using other methods
-            print("No metadata found in file or filename.")
-        except Exception as e:
-            print("Error processing WAV file:", e)
         return song
 
 
