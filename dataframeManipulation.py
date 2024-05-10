@@ -17,15 +17,15 @@ def filter_dataframe (df):
     while choice != originState:
         if choice == 1:
             genre = input("Enter the genre of choice: ")
-            sortedDataframe = df[df['Genre'] == genre]
+            sortedDataframe = df[df['genre'] == genre]
             choice = 0
         elif choice == 2:
             artist = input("Enter the artist you're searching for: ")
-            sortedDataframe = df[df['Artist'] == artist]
+            sortedDataframe = df[df['artist'] == artist]
             choice = 0
         elif choice == 3:
             year = input("Enter the year from the songs you want to listen to: ")
-            sortedDataframe = df[df['Year'] == year]
+            sortedDataframe = df[df['year'] == year]
             choice = 0
         elif choice == 4:
             sortedDataframe = df

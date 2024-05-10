@@ -36,8 +36,6 @@ current_position = 0
 # Flag to check if the song is paused
 paused = False
 
-current_position = 0 #Current position of the song in seconds --> For a progress bar/slider (let the progress bar change this value? Or Let  user Input change it?)
-paused = False     #Flag to check if the song is paused
 
 class Song:
     def __init__ (self, title, artist, genre, year, album, file_path, id = None):

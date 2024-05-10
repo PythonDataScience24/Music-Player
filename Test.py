@@ -1,5 +1,6 @@
 from MusicDatabase import MusicDatabase
 import pandas as pd
+from dataframeManipulation import filter_dataframe
 
 # Create a MusicDatabase instance
 music_db = MusicDatabase()
@@ -15,7 +16,7 @@ def checkIfDataframeExists ():
     else:
        print("Failed to create dataframe.")
 
-def testWorkflow ():
+def DataframeManipulation ():
     keepLoop = True
 
     while keepLoop:
@@ -26,13 +27,15 @@ def testWorkflow ():
 
         # Print the entire dataframe to verify the song was added
         print(music_db.music_library)
-        songToRemove = input('Enter the ID of the song you want to remove: ')
-        music_db.remove_song(songToRemove)
-        print(music_db.music_library)
+        # songToRemove = input('Enter the ID of the song you want to remove: ')
+        # music_db.remove_song(songToRemove)
+        # print(music_db.music_library)
+
+        filtered_df = filter_dataframe(music_db.music_library)
+        print(filtered_df)
 
         decision = input("you want to keep testing? (y/n)")
         if decision == 'n':
            keepLoop = False
-
 checkIfDataframeExists()
-testWorkflow()
+DataframeManipulation()
