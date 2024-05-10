@@ -12,6 +12,7 @@ import pandas as pd
 import csv
 from Music import Song
 from dataframeManipulation import filter_dataframe
+from mutagen.wave import WAVE
 
 # in this file we set up the database/dataframe and save it. This will be the anchor point of the other files/functions
 
@@ -101,6 +102,17 @@ class MusicDatabase:
         
         # Create a new DataFrame with the song data
         new_row = pd.DataFrame([vars(song)], columns=vars(self.dummy_song).keys())
+
+        # use metadata from .wav file to complete dataframe
+        try:
+            audio = WAVE(song.file_path)
+            song.title = audio.tags.get("title", [""])[0]
+            song.artist = audio.tags.get("artist", [""])[0]
+            song.genre = audio.tags.get("genre", [""])[0]
+            song.year = audio.tags.get("date", [""])[0]
+            song.album = audio.tags.get("album", [""])[0]
+        except Exception as e:
+            print("Error extracting metadata:", e)
         
         # Append the new row to the music_library DataFrame
         self.music_library = pd.concat([self.music_library, new_row], ignore_index=True)
