@@ -1,7 +1,5 @@
 import MusicDatabase as mdb
 import pygame               #Library to play audio files (Da chönnt me oh eifch pygame.mixer bruche lol)
-from mutagen.mp3 import MP3 #Mutagen is a Python module to handle audio metadata --> This could be easier than letting the user input the metadata himself...
-from mutagen.wave import WAVE
 
 pygame.mixer.init()         #Initialize the mixer module
 #pygame.mixer.music.set_endevent(pygame. ?? ) #Trigger an event when the music ends (next song for example)

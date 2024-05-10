@@ -10,9 +10,10 @@ Hist:
 
 import pandas as pd
 import csv
-from Music import Song
+from Song import Song
 from dataframeManipulation import filter_dataframe
-from mutagen.wave import WAVE
+import sounddevice as sd
+from scipy.io.wavfile import read
 
 # in this file we set up the database/dataframe and save it. This will be the anchor point of the other files/functions
 
@@ -31,7 +32,9 @@ class MusicDatabase:
     This method creates a dummy Song instance and loads the music library DataFrame.
     '''
     def __init__ (self):
-        self.dummy_song = Song("", "", "", "", "", "", None)  # Create a dummy Song instance
+        # create a dummy song with empty values
+        self.dummy_song = Song(title="", artist= "", genre="", year="", album="", file_path="", id=None)  # Create a dummy Song instance
+        # set up the music library --> load an existing dataframe or create a new one
         self.music_library = self.load_dataframe()
 
     # load the dataframe if possible and if not then create a dataframe
@@ -99,26 +102,40 @@ class MusicDatabase:
             song.id = self.music_library['id'].max() + 1
         else:
             song.id = 1
-        
+           
         # Create a new DataFrame with the song data
         new_row = pd.DataFrame([vars(song)], columns=vars(self.dummy_song).keys())
-
-        # use metadata from .wav file to complete dataframe
-        try:
-            audio = WAVE(song.file_path)
-            song.title = audio.tags.get("title", [""])[0]
-            song.artist = audio.tags.get("artist", [""])[0]
-            song.genre = audio.tags.get("genre", [""])[0]
-            song.year = audio.tags.get("date", [""])[0]
-            song.album = audio.tags.get("album", [""])[0]
-        except Exception as e:
-            print("Error extracting metadata:", e)
         
         # Append the new row to the music_library DataFrame
         self.music_library = pd.concat([self.music_library, new_row], ignore_index=True)
         
         # Save the updated DataFrame
         self.save_dataframe(self.music_library)
+      
+    # function that gets information from the user to add a certain song. will be used in combination with add_song
+    def get_song_to_add(self):
+        """ Prompts the user to input the file path of a .wav file and returns a Song instance with metadata.
+
+        Returns:
+            _type_: _description_
+        """
+        
+        file_path = input("Enter the file path of the .wav file: ")
+        song = Song(title="", artist="", genre="", year="", album="", file_path=file_path)
+
+        # Prompt user for missing information
+        song.title = input("Enter the song title (or leave blank): ")
+        song.artist = input("Enter the artist name (or leave blank): ")
+        song.genre = input("Enter the genre (or leave blank): ")
+        song.year = input("Enter the release year (or leave blank): ")
+        song.album = input("Enter the album name (or leave blank): ")
+
+            # Inform user if no metadata found using other methods
+            print("No metadata found in file or filename.")
+        except Exception as e:
+            print("Error processing WAV file:", e)
+        return song
+
 
     def remove_song(self, id):
         '''

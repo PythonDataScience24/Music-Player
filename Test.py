@@ -21,7 +21,8 @@ def testWorkflow ():
     while keepLoop:
        
         # # Add the song to the database
-        music_db.add_song()
+        song = music_db.get_song_to_add()
+        music_db.add_song(song= song)
 
         # Print the entire dataframe to verify the song was added
         print(music_db.music_library)
