@@ -1,7 +1,7 @@
 import tkinter as tk
 import customtkinter as ctk
 
-from Music import Song
+from Song import Song
 import MusicDatabase
 
 #pip install customtkinter
@@ -118,6 +118,8 @@ class CustomProgressBar(tk.Frame):
 
         self.update_progress(int(percentage * 100))
 
+
+
 #SongPlayer class
 class SongPlayer(tk.Frame):
     
@@ -142,6 +144,12 @@ class SongPlayer(tk.Frame):
             #self.progressbar.update_progress(50)
 
 
+            #add volume slider
+            self.slider = ctk.CTkSlider(self, from_=0, to=100, command=self.set_volume)
+            self.slider.set(50)
+            self.slider.grid(row=3, column=0, columnspan=6)
+
+            self.volume = self.slider.get()
 
     
             self.titleLabel = ctk.CTkLabel(self, text="No Song Selected", width=20, font=("Arial", 12, "bold"))
@@ -182,6 +190,8 @@ class SongPlayer(tk.Frame):
         def play_song(self):
 
             if self.song:
+                #self.song.volume = self.volume
+                #self.song.play_song()
                 print(f"Playing {self.song}")   
 
             else:
@@ -275,6 +285,11 @@ class SongPlayer(tk.Frame):
 
             cancel_button = ctk.CTkButton(popup, text="Cancel", command=popup.destroy)
             cancel_button.pack()
+
+        def set_volume(self, value):
+            self.volume = int(value)
+            if self.song:
+                self.song.volume = self.volume
 
 #Create the main application
 class  App(tk.Tk):
