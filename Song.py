@@ -23,6 +23,8 @@ Methods:
     volume: amplify the volume of the song playing
 '''
 
+# pip install sounddevice
+# pip install scipy
 import sounddevice as sd
 import numpy as np
 from scipy.io.wavfile import read

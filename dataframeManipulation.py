@@ -31,6 +31,7 @@ def filter_dataframe (df):
             sortedDataframe = df
             choice = 0
         else:
+            # throws me out without giving print message but this error message: " ValueError: invalid literal for int() with base 10: '' "
             print('invalid choice! please enter again')
             choice = 0
     return sortedDataframe
