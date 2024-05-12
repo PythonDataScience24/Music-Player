@@ -30,12 +30,6 @@ from scipy.io.wavfile import read
 # Default sample rate for playback
 DEFAULT_SAMPLE_RATE = 44100
 
-# Current position of the song in seconds
-current_position = 0
-
-# Flag to check if the song is paused
-paused = False
-
 
 class Song:
     def __init__ (self, title, artist, genre, year, album, file_path, id = None):
@@ -46,42 +40,47 @@ class Song:
         self.album = album
         self.file_path = file_path
         self.id = id
+        self.audio_data = None
+        self.sample_rate = DEFAULT_SAMPLE_RATE
+        self.paused = False
+        self.current_position = 0
 
 
     def play_song(self):
-        global paused, current_position
         #check if the state of paused is false if it is so then we play the song
-        if paused:
-            sd.play(self.audio_data, self.sample_rate, start=int(current_position * self.sample_rate))
-            paused = False
+        if self.paused:
+            sd.play(self.audio_data, self.sample_rate, start=int(self.current_position * DEFAULT_SAMPLE_RATE))
+            self.paused = False
+            print("Resuming playback:", self.title)
         else:
-        # Read audio data from file and assign it to song.audio_data
-        # Discard the sample rate returned by read() using the underscore 
-            _, self.audio_data = read(self.file_path)
-            self.sample_rate = DEFAULT_SAMPLE_RATE  # Set default sample rate
-            sd.play(self.audio_data, self.sample_rate)
-            paused = False
-        print("Now playing:", self.title)
+            try:
+                if not self.audio_data:
+                    _, self.audio_data = read(self.file_path)
+                sd.play(self.audio_data, self.sample_rate)
+                print("Now playing:", self.title)
+            except Exception as e:
+                print(f"Error occurred while playing {self.title}: {e}")
 
     def pause_song(self):       #Hier kann pausiert oder fortgesetzt werden
-        global paused
-        if paused:
-            sd.resume()
-            paused = False
-        else:
-            sd.pause()
-            paused = True
+        if not self.paused:
+            sd.stop()
+            self.paused = True
+            print("Song paused:", self.title)
 
     # here the song playing gets killed off
     def stop_song(self):        
         sd.stop()
+        self.paused = False
+        self.current_position = 0
+        print("Playback stopped:", self.title)
 
     # Position (in einer Progressbar) verändern - Achtung: geht nur für mp3
     def set_position(self, value : float):
-        global current_position
-        current_position = value
-        if not paused:
-            sd.stop()
+        if value < 0 or value > 1:
+            raise ValueError("Position value must be between 0 and 1.")
+        self.current_position = value
+        if not self.paused:
+            self.stop_song()
             self.play_song()
 
     
@@ -89,26 +88,18 @@ class Song:
     # Hier jeweils den nächsten Song in die Queue einfügen? Oder ist das obsolet
 
 
-    def next_song():
-        pass
+    # def next_song():
+    #     pass
 
-    def previous_song():
-        pass
+    # def previous_song():
+    #     pass
 
     # To set the volume
-    def volume(self, value : int):
-        # check the value if it is possible to amplify it that far 
-        #--> restriction so that the user cannot make misinputs --> ask the user how many percent they want to increase it
+    def volume(self, value: int):
         if value < 0 or value > 100:
             raise ValueError("Volume value must be between 0 and 100.")
-    
-        # Convert volume percentage to a scale factor
         scale_factor = value / 100.0
-    
-        # Amplify the audio data using numpy
         self.audio_data = np.multiply(self.audio_data, scale_factor)
-
-        #   If the song is currently playing, restart playback with the new volume
-        if not paused:
-            sd.stop()
+        if not self.paused:
+            self.stop_song()
             self.play_song()
