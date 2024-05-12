@@ -1,5 +1,5 @@
-from MusicDatabase import MusicDatabase
 import pandas as pd
+from MusicDatabase import MusicDatabase
 from dataframeManipulation import filter_dataframe
 
 # Create a MusicDatabase instance
@@ -17,9 +17,9 @@ def checkIfDataframeExists ():
        print("Failed to create dataframe.")
 
 def DataframeManipulation ():
-    keepLoop = True
+    keep_loop = True
 
-    while keepLoop:
+    while keep_loop:
        
         # # Add the song to the database
         song = music_db.get_song_to_add()
@@ -36,6 +36,25 @@ def DataframeManipulation ():
 
         decision = input("you want to keep testing? (y/n)")
         if decision == 'n':
-           keepLoop = False
+          keep_loop = False
+
+
+def play_function_tests ():
+    try:
+        # Retrieve song object from database (assuming successful retrieval)
+        song = music_db.get_song(1)
+
+        # Check if song has a valid file path
+        if song.file_path:
+            song.play_song()
+        else:
+          print("Song object doesn't have a valid file path")
+    except Exception as e:
+      print(f"Error occurred while getting or playing song: {e}")
+
+
+
+
 checkIfDataframeExists()
 DataframeManipulation()
+play_function_tests()
