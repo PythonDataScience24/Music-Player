@@ -163,7 +163,7 @@ class MusicDatabase:
             library.append(song)
         return library
 
-    def get_song(self, id):
+    def get_song_info(self, id):
         '''
         Searches for a specific song based on the ID.
 
@@ -186,3 +186,34 @@ class MusicDatabase:
             }
         else:
             return None
+        
+    def get_song (self, id):
+        """this method fetches the requested song
+
+        Args:
+            id (int): id of a song that corresponds to an id within the dataframe
+
+        Returns:
+            song (Song): song object that matches the id
+        """
+        id = int(id)
+    
+        # Search for the song with the given ID in the music library DataFrame
+        song_data = self.music_library[self.music_library['id'] == id]
+    
+        # Check if the song exists
+        if not song_data.empty:
+            # Extract song attributes from the DataFrame
+            song_attributes = song_data.iloc[0].to_dict()
+        
+            # Create and return a Song object
+            return Song(
+                title=song_attributes['title'],
+                artist=song_attributes['artist'],
+                genre=song_attributes['genre'],
+                year=song_attributes['year'],
+                album=song_attributes['album'],
+                file_path=song_attributes['file_path'],
+                id=song_attributes['id']
+            )
+        return None
