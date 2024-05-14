@@ -1,8 +1,10 @@
 import tkinter as tk
 import customtkinter as ctk
-
+from Player import Player
 from Song import Song
 import MusicDatabase
+import threading
+import time
 
 #pip install customtkinter
 
@@ -83,7 +85,7 @@ class ScrollableListbox(tk.Frame):
         song = self.library[index]
         print(f"You double-clicked {song}!")
         self.songPlayer.select_song(song)   
-        self.songPlayer.play_song()
+        #self.songPlayer.play_song()
  
 
 #SongPlayer class
@@ -103,24 +105,25 @@ class SongPlayer(tk.Frame):
 
             self.song = None
             self.parent = parent
+            self.player = Player()
 
 
 
             #add volume slider
             self.volumeSlider = ctk.CTkSlider(self, from_=0, to=100, command=self.set_volume)
-            self.volumeSlider.set(50)
+            self.volumeSlider.set(10)
             self.volumeSlider.grid(row=3, column=0, columnspan=6)
 
-            self.volume = self.volumeSlider.get()
-
+            self.set_volume(self.volumeSlider.get())
 
             #add playback position slider
-            self.playbackSlider = ctk.CTkSlider(self, from_=0, to=100, command=self.set_volume)
+            self.playbackSlider = ctk.CTkSlider(self, from_=0, to=100, command=self.set_playback)
             self.playbackSlider.set(0)
             self.playbackSlider.grid(row=4, column=0, columnspan=6)
 
             #player updatePositionEvent = setPlaybackSliderPosition
-
+            self.update_thread = threading.Thread(target=self.update_slider)
+            self.update_thread.start()
 
 
     
@@ -154,6 +157,7 @@ class SongPlayer(tk.Frame):
             self.song = song
             self.titleLabel.configure(text=song.title)
             self.artistLabel.configure(text=song.artist)
+            self.player.play_song(song)
 
           
         def get_song_info(self):
@@ -194,14 +198,14 @@ class SongPlayer(tk.Frame):
     
         def play_song(self):
 
-            #if (self.player.isPlaying() == False): start playback: else stop playback
 
+            # check if song selected and if playing or not
             if self.song:
-                #self.song.volume = self.volume
-                #self.song.play_song()
-                print(f"Playing {self.song}")   
-                self.song.play_song()
-
+                if self.player.is_playing():
+                    self.player.pause_song()
+                else:
+                    self.player.resume_song()
+                
             else:
                 print("No song selected!")
                 
@@ -294,11 +298,20 @@ class SongPlayer(tk.Frame):
             cancel_button.pack()
 
         def set_volume(self, value):
-            self.volume = int(value)
-
+            self.player.set_volume(value)
             #player.setVolume(volume)
             """ if self.song:
                 self.song.volume = self.volume """
+            
+        def set_playback(self, value):
+            self.player.set_position(value)
+
+        def update_slider(self):
+            while not self.player.stop_update_thread.is_set():
+                if self.player.is_playing():
+                    self.playbackSlider.set(self.player.get_position())
+                time.sleep(1)  # Adjust the sleep duration as needed for smoother updating
+
 
 #Create the main application
 class  App(tk.Tk):
