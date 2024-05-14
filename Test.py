@@ -1,4 +1,5 @@
 import pandas as pd
+import time
 from MusicDatabase import MusicDatabase
 from dataframeManipulation import filter_dataframe
 
@@ -55,6 +56,6 @@ def play_function_tests ():
 
 
 
-checkIfDataframeExists()
-DataframeManipulation()
+# checkIfDataframeExists()
+# DataframeManipulation()
 play_function_tests()

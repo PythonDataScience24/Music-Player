@@ -23,10 +23,9 @@ Methods:
     volume: amplify the volume of the song playing
 '''
 
-# pip install sounddevice
-# pip install scipy
 import sounddevice as sd
 import numpy as np
+import time
 from scipy.io.wavfile import read
 
 # Default sample rate for playback
@@ -47,30 +46,94 @@ class Song:
         self.paused = False
         self.current_position = 0
 
+    # this is a super long method so i just used helper methods for increased readablity
+    # def play_song(self):
+    #     #check if the state of paused is false if it is so then we play the song
+    #     if self.paused:
+    #         sd.play(self.audio_data, self.sample_rate, start=int(self.current_position * DEFAULT_SAMPLE_RATE))
+    #         self.paused = False
+    #         print("Resuming playback:", self.title)
+    #     else:
+    #         try:
+    #             if not self.audio_data:
+    #                 sample_rate, audio_data = read(self.file_path)
+    #                 self.audio_data = audio_data.astype(np.float32)  # Convert to float32 for compatibility with sounddevice
+    #                 self.sample_rate = sample_rate
+    #             sd.play(self.audio_data, self.sample_rate)
+    #             print("Now playing:", self.title)
+
+    #              # Calculate duration of the audio file
+    #             duration_seconds = len(self.audio_data) / self.sample_rate
+
+    #             # Wait for the duration of the song
+    #             time.sleep(duration_seconds)
+    #         except Exception as e:
+    #             print(f"Error occurred while playing {self.title}: {e}")
 
     def play_song(self):
-        #check if the state of paused is false if it is so then we play the song
+        """Handle how a song should be played. Resume it or start an entirely new song. play a song using the helper methods to load data
+        and play it
+        """
         if self.paused:
+            # If song is paused, resume playback from current position
             sd.play(self.audio_data, self.sample_rate, start=int(self.current_position * DEFAULT_SAMPLE_RATE))
             self.paused = False
             print("Resuming playback:", self.title)
         else:
-            try:
-                if not self.audio_data:
-                    _, self.audio_data = read(self.file_path)
-                sd.play(self.audio_data, self.sample_rate)
-                print("Now playing:", self.title)
-            except Exception as e:
-                print(f"Error occurred while playing {self.title}: {e}")
+            # if there is no song paused start up a new song and play it!
+            self.load_audio_data()  # Load audio data if not already loaded
+            self.play_audio()  # Play the song
+
+    def load_audio_data(self):
+        """this method loads the audio data and normalizes it. It converts the data to 32float.
+        """
+        try:
+            if not self.audio_data:
+                # Reads the audio file
+                sample_rate, audio_data = read(self.file_path)
+                # convert the audio data to a float32 to assure the compatibility with the sounddevice extension
+                self.audio_data = audio_data.astype(np.float32)  # Convert to float32 for compatibility with sounddevice
+                self.sample_rate = sample_rate
+
+                # Normalize the audio data to the range [-1, 1]
+                # we normalize to prevent clipping of the sound and to regulate the noise to sound ratio to regulate the clarity of the playback
+                max_val = np.max(np.abs(self.audio_data))
+                if max_val > 1:
+                    self.audio_data /= max_val
+
+        except Exception as e:
+            print(f"Error occurred while loading audio data for {self.title}: {e}")
+    
+    def play_audio(self):
+        """this method plays the audio of a song instance.
+        """
+        try:
+            # play the audio using sounddevice play function 
+            sd.play(self.audio_data, self.sample_rate)
+            print("Now playing:", self.title)
+
+            # Calculate duration of the audio file
+            duration_seconds = len(self.audio_data) / self.sample_rate
+
+            # Wait for the duration of the song
+            time.sleep(duration_seconds)
+
+        except Exception as e:
+            print(f"Error occurred while playing {self.title}: {e}")
+
 
     def pause_song(self):       #Hier kann pausiert oder fortgesetzt werden
+        """pause the currently playing song!
+        """
         if not self.paused:
             sd.stop()
             self.paused = True
             print("Song paused:", self.title)
 
     # here the song playing gets killed off
-    def stop_song(self):        
+    def stop_song(self):
+        """playback of a song is terminated without the ability to resume the song
+        """
         sd.stop()
         self.paused = False
         self.current_position = 0
@@ -78,6 +141,14 @@ class Song:
 
     # Position (in einer Progressbar) verändern - Achtung: geht nur für mp3
     def set_position(self, value : float):
+        """set position of playback and make the song playback skip to that point
+
+        Args:
+            value (float): value where we want to start the new playback
+
+        Raises:
+            ValueError: if the value is not within the bounds we cannot skip the song position to that part
+        """
         if value < 0 or value > 1:
             raise ValueError("Position value must be between 0 and 1.")
         self.current_position = value
@@ -85,7 +156,6 @@ class Song:
             self.stop_song()
             self.play_song()
 
-    
     # def song_queue(song: mdb.Song):
     # Hier jeweils den nächsten Song in die Queue einfügen? Oder ist das obsolet
 
@@ -98,6 +168,14 @@ class Song:
 
     # To set the volume
     def volume(self, value: int):
+        """increase or decrease the volume of the playback
+
+        Args:
+            value (int): how much to increase of decrease the value
+
+        Raises:
+            ValueError: error if the value is not within the proper range
+        """
         if value < 0 or value > 100:
             raise ValueError("Volume value must be between 0 and 100.")
         scale_factor = value / 100.0

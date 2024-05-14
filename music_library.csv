@@ -1,0 +1,2 @@
+title,artist,genre,year,album,file_path,id,audio_data,sample_rate,paused,current_position
+Tear up the Sky,the young gods,punk,2020,album,/Users/massimilianovella/Desktop/UNIVERSITÄT/Informatik/Semester 6/Programming for Data Science/Music-Player/sampleData/sampleSongsForDatabase/02 Tear Up the Red Sky.wav,1,,44100,False,0
