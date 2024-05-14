@@ -25,7 +25,6 @@ Methods:
 
 import sounddevice as sd
 import numpy as np
-import time
 from scipy.io.wavfile import read
 
 # Default sample rate for playback
@@ -93,7 +92,7 @@ class Song:
                 # Reads the audio file
                 sample_rate, audio_data = read(self.file_path)
                 # convert the audio data to a float32 to assure the compatibility with the sounddevice extension
-                self.audio_data = audio_data.astype(np.float32)  # Convert to float32 for compatibility with sounddevice
+                self.audio_data = audio_data.astype(np.float32)
                 self.sample_rate = sample_rate
 
                 # Normalize the audio data to the range [-1, 1]

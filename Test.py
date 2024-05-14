@@ -97,6 +97,6 @@ def play_function_tests():
 
 
 
-# checkIfDataframeExists()
-# DataframeManipulation()
+checkIfDataframeExists()
+DataframeManipulation()
 play_function_tests()

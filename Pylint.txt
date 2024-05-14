@@ -1,0 +1,95 @@
+Message: Unused variable 'index'
+Details:
+[{
+	"resource": "/Users/massimilianovella/Desktop/UNIVERSITÄT/Informatik/Semester 6/Programming for Data Science/Music-Player/MusicDatabase.py",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": {
+		"value": "W0612:unused-variable",
+		"target": {
+			"$mid": 1,
+			"path": "/en/latest/user_guide/messages/warning/unused-variable.html",
+			"scheme": "https",
+			"authority": "pylint.readthedocs.io"
+		}
+	},
+	"severity": 4,
+	"message": "Unused variable 'index'",
+	"source": "Pylint",
+	"startLineNumber": 153,
+	"startColumn": 13,
+	"endLineNumber": 153,
+	"endColumn": 18
+}]
+Fix= delete the unused variable index
+
+Message: Missing class docstring
+Details:
+[{
+	"resource": "/Users/massimilianovella/Desktop/UNIVERSITÄT/Informatik/Semester 6/Programming for Data Science/Music-Player/Song.py",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": {
+		"value": "C0115:missing-class-docstring",
+		"target": {
+			"$mid": 1,
+			"path": "/en/latest/user_guide/messages/convention/missing-class-docstring.html",
+			"scheme": "https",
+			"authority": "pylint.readthedocs.io"
+		}
+	},
+	"severity": 2,
+	"message": "Missing class docstring",
+	"source": "Pylint",
+	"startLineNumber": 35,
+	"startColumn": 1,
+	"endLineNumber": 35,
+	"endColumn": 11
+}]
+Fix= added docstring
+
+Message: standard import "import time" should be placed before "import sounddevice as sd"
+Details:
+[{
+	"resource": "/Users/massimilianovella/Desktop/UNIVERSITÄT/Informatik/Semester 6/Programming for Data Science/Music-Player/Song.py",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": {
+		"value": "C0411:wrong-import-order",
+		"target": {
+			"$mid": 1,
+			"path": "/en/latest/user_guide/messages/convention/wrong-import-order.html",
+			"scheme": "https",
+			"authority": "pylint.readthedocs.io"
+		}
+	},
+	"severity": 2,
+	"message": "standard import \"import time\" should be placed before \"import sounddevice as sd\"",
+	"source": "Pylint",
+	"startLineNumber": 28,
+	"startColumn": 1,
+	"endLineNumber": 28,
+	"endColumn": 12
+}]
+fix= reorder the imports and even remove some imports which i do not need anymore
+
+Message: Line too long (120/100)
+Details:
+[{
+	"resource": "/Users/massimilianovella/Desktop/UNIVERSITÄT/Informatik/Semester 6/Programming for Data Science/Music-Player/Song.py",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": {
+		"value": "C0301:line-too-long",
+		"target": {
+			"$mid": 1,
+			"path": "/en/latest/user_guide/messages/convention/line-too-long.html",
+			"scheme": "https",
+			"authority": "pylint.readthedocs.io"
+		}
+	},
+	"severity": 2,
+	"message": "Line too long (120/100)",
+	"source": "Pylint",
+	"startLineNumber": 95,
+	"startColumn": 1,
+	"endLineNumber": 95,
+	"endColumn": 1
+}]
+Fix= shorten the comment behind the line and place it above the according code line
