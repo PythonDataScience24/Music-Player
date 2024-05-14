@@ -1,0 +1,23 @@
+Message: Unused variable 'index'
+Details:
+[{
+	"resource": "/Users/massimilianovella/Desktop/UNIVERSITÄT/Informatik/Semester 6/Programming for Data Science/Music-Player/MusicDatabase.py",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": {
+		"value": "W0612:unused-variable",
+		"target": {
+			"$mid": 1,
+			"path": "/en/latest/user_guide/messages/warning/unused-variable.html",
+			"scheme": "https",
+			"authority": "pylint.readthedocs.io"
+		}
+	},
+	"severity": 4,
+	"message": "Unused variable 'index'",
+	"source": "Pylint",
+	"startLineNumber": 153,
+	"startColumn": 13,
+	"endLineNumber": 153,
+	"endColumn": 18
+}]
+Fix= delete the unused variable index
