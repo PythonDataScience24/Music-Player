@@ -76,7 +76,8 @@ class Song:
         """
         if self.paused:
             # If song is paused, resume playback from current position
-            sd.play(self.audio_data, self.sample_rate, start=int(self.current_position * DEFAULT_SAMPLE_RATE))
+            start_sample = int(self.current_position * self.sample_rate)
+            sd.play(self.audio_data[start_sample:], self.sample_rate)
             self.paused = False
             print("Resuming playback:", self.title)
         else:
@@ -104,20 +105,28 @@ class Song:
         except Exception as e:
             print(f"Error occurred while loading audio data for {self.title}: {e}")
     
+    # def play_audio(self):
+    #     """this method plays the audio of a song instance.
+    #     """
+    #     try:
+    #         # play the audio using sounddevice play function 
+    #         sd.play(self.audio_data, self.sample_rate)
+    #         print("Now playing:", self.title)
+
+    #         # Calculate duration of the audio file
+    #         duration_seconds = len(self.audio_data) / self.sample_rate
+
+    #         # Wait for the duration of the song
+    #         time.sleep(duration_seconds)
+
+    #     except Exception as e:
+    #         print(f"Error occurred while playing {self.title}: {e}")
     def play_audio(self):
-        """this method plays the audio of a song instance.
-        """
+        """This method plays the audio of a song instance."""
         try:
-            # play the audio using sounddevice play function 
+            # Play the audio using sounddevice play function
             sd.play(self.audio_data, self.sample_rate)
             print("Now playing:", self.title)
-
-            # Calculate duration of the audio file
-            duration_seconds = len(self.audio_data) / self.sample_rate
-
-            # Wait for the duration of the song
-            time.sleep(duration_seconds)
-
         except Exception as e:
             print(f"Error occurred while playing {self.title}: {e}")
 
@@ -151,10 +160,12 @@ class Song:
         """
         if value < 0 or value > 1:
             raise ValueError("Position value must be between 0 and 1.")
-        self.current_position = value
+        position_samples = int(value * len(self.audio_data))
+        # Set the current position
+        self.current_position = position_samples / self.sample_rate
         if not self.paused:
-            self.stop_song()
-            self.play_song()
+            self.pause_song()  # Pause the song at the current position
+            self.play_song()   # Resume playback from the new position
 
     # def song_queue(song: mdb.Song):
     # Hier jeweils den nächsten Song in die Queue einfügen? Oder ist das obsolet

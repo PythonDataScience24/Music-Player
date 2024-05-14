@@ -40,18 +40,59 @@ def DataframeManipulation ():
           keep_loop = False
 
 
-def play_function_tests ():
+# def play_function_tests ():
+#   try:
+#     # Retrieve song object from database (assuming successful retrieval)
+#     song = music_db.get_song(1)
+
+#     # Check if song has a valid file path
+#     if song.file_path:
+#       # Play the song
+#       song.play_song()
+
+#       # Set the position of the song at 30% (0.3) of its duration
+#       song.set_position(0.3)
+
+#       # Pause the song after 5 seconds (for testing purposes)
+#       time.sleep(5)
+#       song.pause_song()
+
+#       # Resume playback after another 5 seconds (for testing purposes)
+#       time.sleep(5)
+#       song.play_song()
+#     else:
+#       print("Song object doesn't have a valid file path")
+#   except Exception as e:
+#     print(f"Error occurred while getting or playing song: {e}")
+
+def play_function_tests():
     try:
         # Retrieve song object from database (assuming successful retrieval)
         song = music_db.get_song(1)
 
         # Check if song has a valid file path
         if song.file_path:
+            # Play the song
             song.play_song()
+            print("Song started playing...")
+
+            # Set the position of the song at 30% (0.3) of its duration
+            song.set_position(0.3)
+            print("Position set to 30%...")
+
+            # Pause the song after 5 seconds (for testing purposes)
+            time.sleep(5)
+            song.pause_song()
+            print("Song paused after 5 seconds...")
+
+            # Resume playback after another 5 seconds (for testing purposes)
+            time.sleep(5)
+            song.play_song()
+            print("Song resumed after 5 seconds...")
         else:
-          print("Song object doesn't have a valid file path")
+            print("Song object doesn't have a valid file path")
     except Exception as e:
-      print(f"Error occurred while getting or playing song: {e}")
+        print(f"Error occurred while getting or playing song: {e}")
 
 
 
