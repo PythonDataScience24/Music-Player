@@ -85,40 +85,6 @@ class ScrollableListbox(tk.Frame):
         self.songPlayer.select_song(song)   
         self.songPlayer.play_song()
  
-#CustomProgressBar class
-class CustomProgressBar(tk.Frame):
-
-    def __init__(self, parent, *args, **kwargs):
-        tk.Frame.__init__(self, parent, *args, **kwargs)
-
-        
-
-        style = tk.ttk.Style()
-        style.configure("TProgressbar", thickness=100)
-
-        self.progressbar = tk.ttk.Progressbar(self, orient="horizontal", length=200, mode="determinate", style="TProgressbar")
-        self.progressbar.pack(fill=tk.X, expand=True)
-
-        self.bind("<Button-1>", self.on_progressbar_click) #does not work. so not possible to set playback position at the moment
-        #self.update_progress(50)
-
-    def update_progress(self, value):
-        '''
-        This method updates the progress of the progress bar.
-
-        Args:
-            value (int): The value to set the progress bar to.
-        '''
-
-        self.progressbar["value"] = value
-
-    def on_progressbar_click(self, event):
-        percentage = event.x / self.progressbar.winfo_width()
-        print(f"Clicked at {percentage * 100}%")
-
-        self.update_progress(int(percentage * 100))
-
-
 
 #SongPlayer class
 class SongPlayer(tk.Frame):
@@ -138,18 +104,24 @@ class SongPlayer(tk.Frame):
             self.song = None
             self.parent = parent
 
-            #add progressbar to bottom
-            self.progressbar = CustomProgressBar(self)
-            #self.progressbar.place(relx=0.1, rely=0.9, relwidth=0.8)
-            #self.progressbar.update_progress(50)
 
 
             #add volume slider
-            self.slider = ctk.CTkSlider(self, from_=0, to=100, command=self.set_volume)
-            self.slider.set(50)
-            self.slider.grid(row=3, column=0, columnspan=6)
+            self.volumeSlider = ctk.CTkSlider(self, from_=0, to=100, command=self.set_volume)
+            self.volumeSlider.set(50)
+            self.volumeSlider.grid(row=3, column=0, columnspan=6)
 
-            self.volume = self.slider.get()
+            self.volume = self.volumeSlider.get()
+
+
+            #add playback position slider
+            self.playbackSlider = ctk.CTkSlider(self, from_=0, to=100, command=self.set_volume)
+            self.playbackSlider.set(0)
+            self.playbackSlider.grid(row=4, column=0, columnspan=6)
+
+            #player updatePositionEvent = setPlaybackSliderPosition
+
+
 
     
             self.titleLabel = ctk.CTkLabel(self, text="No Song Selected", width=20, font=("Arial", 12, "bold"))
@@ -172,32 +144,67 @@ class SongPlayer(tk.Frame):
             self.AddButton.grid(row=1, column=0)
             self.RemoveButton.grid(row=2, column=0)
             self.InfoButton.grid(row=2, column=4)
-            self.progressbar.grid(row=4, column=0, columnspan=6)
     
+
+        def setPlaybackSliderPosition(self, position):
+            self.playbackSlider.set(position)
+
 
         def select_song(self, song: Song):
             self.song = song
             self.titleLabel.configure(text=song.title)
             self.artistLabel.configure(text=song.artist)
+
           
         def get_song_info(self):
             if self.song:
                 print("Info button clicked!")
+
+                #open a popup window with the song info
+                popup = tk.Toplevel()
+                popup.title("Song Info")
+                popup.geometry("200x200")
+
+                title_label = tk.Label(popup, text=f"Title: {self.song.title}")
+                title_label.pack()
+
+                artist_label = tk.Label(popup, text=f"Artist: {self.song.artist}")
+                artist_label.pack()
+
+                genre_label = tk.Label(popup, text=f"Genre: {self.song.genre}")
+                genre_label.pack()
+
+                year_label = tk.Label(popup, text=f"Year: {self.song.year}")
+                year_label.pack()
+
+
+                album_label = tk.Label(popup, text=f"Album: {self.song.album}")
+                album_label.pack()
+
+                file_path_label = tk.Label(popup, text=f"File Path: {self.song.file_path}")
+                file_path_label.pack()
+
+                close_button = ctk.CTkButton(popup, text="Close", command=popup.destroy)
+                close_button.pack()
+
+
                 return self.song
             else:  
                 print("No song selected!")
     
         def play_song(self):
 
+            #if (self.player.isPlaying() == False): start playback: else stop playback
+
             if self.song:
                 #self.song.volume = self.volume
                 #self.song.play_song()
                 print(f"Playing {self.song}")   
+                self.song.play_song()
 
             else:
                 print("No song selected!")
                 
-
     
         def forward_song(self):
             if self.song:
@@ -288,8 +295,10 @@ class SongPlayer(tk.Frame):
 
         def set_volume(self, value):
             self.volume = int(value)
-            if self.song:
-                self.song.volume = self.volume
+
+            #player.setVolume(volume)
+            """ if self.song:
+                self.song.volume = self.volume """
 
 #Create the main application
 class  App(tk.Tk):
