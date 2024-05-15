@@ -24,4 +24,10 @@ Decomposition examples:
             according headers that are created through the dummy song instance in the __init__ function. 
     previously, we did not have a way to upkeep a dataframe constantly, as we saved it temporarily. Through this implementation
     of a .csv file we achieved exactly that: a dynamically changeable dataframe.
+    
     updating the .csv file:
+        - add_song, remove_song, and save_dataframe:
+            as previously described this function adds songs to the dataframe. Furthermore, remove_song removes an entry from the dataframe.
+            These functions then use the save_dataframe function to permanently save the newly added song and update the dataframe.
+            Therefore, we decomposed the function to make the code more readable and
+            distribute the necessary steps to add a song and save it in its appropriate functions.
