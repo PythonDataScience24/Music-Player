@@ -150,7 +150,7 @@ class MusicDatabase:
             List[Song]: An array of Song objects.
         '''
         library = []
-        for row in self.music_library.iterrows():
+        for index, row in self.music_library.iterrows():
             song = Song(
                 row['title'],
                 row['artist'],
