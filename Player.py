@@ -1,7 +1,5 @@
-import pygame.midi
 import pygame.mixer
 import pygame
-import time
 import threading
 
 class Player:
@@ -39,8 +37,7 @@ class Player:
 
     def set_position(self, value):
         if self.current_song:
-            song_length = pygame.mixer.Sound(self.current_song.file_path).get_length()
-            pygame.mixer.music.set_pos(value * (song_length/100))
+            pygame.mixer.music.set_pos(value * (self.song_length/100))
 
     def get_position(self):
         return pygame.mixer.music.get_pos() / 1000 / self.song_length * 100

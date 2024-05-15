@@ -197,8 +197,6 @@ class SongPlayer(tk.Frame):
                 print("No song selected!")
     
         def play_song(self):
-
-
             # check if song selected and if playing or not
             if self.song:
                 if self.player.is_playing():
@@ -312,9 +310,18 @@ class SongPlayer(tk.Frame):
                     self.playbackSlider.set(self.player.get_position())
                 time.sleep(1)  # Adjust the sleep duration as needed for smoother updating
 
+        def stop_thread(self):
+            self.player.stop_update_thread.set()  # Set the flag to stop the thread
+            self.update_thread.join()  # Wait for the thread to finish
+
 
 #Create the main application
 class  App(tk.Tk):
+    # func for closing thread
+    def cleanup(self):
+        self.songplayer.stop_thread()  # Stop the update thread before closing
+        self.destroy()  # Destroy the Tkinter window
+
     #initialize the main application
     def __init__(self):
         super().__init__()
@@ -329,6 +336,8 @@ class  App(tk.Tk):
 
         self.listview = ScrollableListbox(self, self.musicDB, self.songplayer)
         self.listview.place(relx=0.1, rely=0.1, relwidth=0.8)
+
+        self.protocol("WM_DELETE_WINDOW", self.cleanup)  # Call cleanup when the window is closed
 
         self.mainloop()
 
