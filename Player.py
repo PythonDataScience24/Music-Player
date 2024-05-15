@@ -33,12 +33,6 @@ class Player:
     def is_playing(self):
         return pygame.mixer.music.get_busy()
     
-    def is_paused(self):
-        return pygame.mixer.music.get_busy() and pygame.mixer.music.get_pos() == -1
-    
-    def is_dead(self):
-        return pygame.mixer.music.get_pos() in (0, self.song_length * 1000)
-    
     def set_volume(self, volume):
         pygame.mixer.music.set_volume(volume/100)
 
