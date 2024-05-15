@@ -110,16 +110,21 @@ class SongPlayer(tk.Frame):
 
 
             #add volume slider
+
+            self.volumelabel = tk.Label(self, text='Volume')
+            self.volumelabel.grid(row=3, column=0)
             self.volumeSlider = ctk.CTkSlider(self, from_=0, to=100, command=self.set_volume)
             self.volumeSlider.set(0)
-            self.volumeSlider.grid(row=3, column=0, columnspan=6)
+            self.volumeSlider.grid(row=3, column=1, columnspan=6)
 
             self.set_volume(self.volumeSlider.get())
 
             #add playback position slider
+            self.playBackLabel = tk.Label(self, text='Playback Position')
+            self.playBackLabel.grid(row=4, column=0)
             self.playbackSlider = ctk.CTkSlider(self, from_=0, to=100, command=self.set_playback)
             self.playbackSlider.set(0)
-            self.playbackSlider.grid(row=4, column=0, columnspan=6)
+            self.playbackSlider.grid(row=4, column=1, columnspan=6)
 
 
 
@@ -320,14 +325,55 @@ class  App(tk.Tk):
         self.musicDB = MusicDatabase.MusicDatabase()
 
         self.songplayer = SongPlayer(self)
-        self.songplayer.place(relx=0.3, rely=0.8, relwidth=2)
+        self.songplayer.place(relx=0.3, rely=0.7, relwidth=2)
 
         self.listview = ScrollableListbox(self, self.musicDB, self.songplayer)
         self.listview.place(relx=0.1, rely=0.1, relwidth=0.8)
 
+        self.filter = ctk.CTkButton(self, text="Filter", command=self.filter_songs)
+        self.filter.place(relx=0.1, rely=0.4, relwidth=0.2)
+
         self.mainloop()
 
     #define the functions for the buttons
+
+    def filter_songs(self):
+
+            def config_filter():
+                song = Song(title.get(), artist.get(), genre.get(), year.get(), album.get(), None, None)
+
+                self.musicDB.filter(song)# needs to add possiblity to add arguments
+                self.listview.update_listbox()
+                popup.destroy()
+                
+
+            popup = tk.Toplevel()
+            #popup.overrideredirect(True)
+            popup.title("Filter List By:")
+            
+            def add_labels_and_entries(text):
+                frame = tk.Frame(popup)
+                frame.pack()
+
+                label = tk.Label(frame, text=text)
+                label.pack(side=tk.LEFT)
+
+                entry = tk.Entry(frame)
+                entry.pack(side=tk.RIGHT)
+
+                return entry
+
+            title = add_labels_and_entries("Title")
+            artist = add_labels_and_entries("Artist")
+            genre = add_labels_and_entries("Genre")
+            year = add_labels_and_entries("Year")
+            album = add_labels_and_entries("Album")
+
+            add_button = ctk.CTkButton(popup, text="Filter", command=config_filter)
+            add_button.pack()
+
+            cancel_button = ctk.CTkButton(popup, text="Cancel", command=popup.destroy)
+            cancel_button.pack()
 
 
 #Run the application
