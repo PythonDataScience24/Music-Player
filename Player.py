@@ -1,4 +1,5 @@
 import pygame.mixer
+# pylint: disable=no-member
 import pygame
 
 

@@ -141,7 +141,7 @@ class MusicDatabase:
             List[Song]: An array of Song objects.
         '''
         library = []
-        for index, row in self.df.iterrows():
+        for _, row in self.df.iterrows():
             song = Song(
                 row['title'],
                 row['artist'],
