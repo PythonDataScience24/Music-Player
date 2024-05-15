@@ -1,13 +1,3 @@
-'''
-Hist: 
-* 20240508 JC: 
-    * implementation of Music.song to create for dataFrame
-    * load_dataframe now creates a new dataFrame if before non existent
-    * ID's are now given uniquely and never change, even if songs added or removed
-    * remove_song takes the unique ID
-    * new def get_library(self): returns all the songs in the current dataFrame as Song objects
-'''
-
 import pandas as pd
 import csv
 from Song import Song
@@ -33,6 +23,7 @@ class MusicDatabase:
         self.dummy_song = Song(title="", artist= "", genre="", year="", album="", file_path="", id=None)  # Create a dummy Song instance
         # set up the music library --> load an existing dataframe or create a new one
         self.music_library = self.load_dataframe()
+        self.df = self.filterdf(self.dummy_song)
 
     # load the dataframe if possible and if not then create a dataframe
     def load_dataframe(self):
@@ -150,7 +141,7 @@ class MusicDatabase:
             List[Song]: An array of Song objects.
         '''
         library = []
-        for index, row in self.music_library.iterrows():
+        for index, row in self.df.iterrows():
             song = Song(
                 row['title'],
                 row['artist'],
@@ -162,6 +153,20 @@ class MusicDatabase:
             )
             library.append(song)
         return library
+    
+    def filterdf(self, song: Song):
+        filtered_df = self.music_library.copy()
+        if not song.title is None:
+            filtered_df = filtered_df[filtered_df['title'] == song.title]
+        elif not song.artist is None:
+            filtered_df = filtered_df[filtered_df['artist'] == song.artist]
+        elif not song.genre is None:
+            filtered_df = filtered_df[filtered_df['genre'] == song.genre]
+        elif not song.year is None:
+            filtered_df = filtered_df[filtered_df['year'] == song.year]
+        elif not song.album is None:
+            filtered_df = filtered_df[filtered_df['album'] == song.album]
+        return filtered_df
 
     def get_song_info(self, id):
         '''
