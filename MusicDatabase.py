@@ -101,6 +101,7 @@ class MusicDatabase:
         # Save the updated DataFrame
         self.save_dataframe(self.music_library)
       
+    # only terminal (later uses not needed)
     # function that gets information from the user to add a certain song. will be used in combination with add_song
     def get_song_to_add(self):
         """ Prompts the user to input the file path of a .wav file and returns a Song instance with metadata.
@@ -194,6 +195,7 @@ class MusicDatabase:
         else:
             return None
         
+    # don't think we need this method
     def get_song (self, id):
         """this method fetches the requested song
 

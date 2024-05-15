@@ -22,11 +22,6 @@ Methods:
     previous_song: go back to the previous song played
     volume: amplify the volume of the song playing
 '''
-
-import sounddevice as sd
-import numpy as np
-from scipy.io.wavfile import read
-
 # Default sample rate for playback
 DEFAULT_SAMPLE_RATE = 44100
 
@@ -44,6 +39,11 @@ class Song:
         self.sample_rate = DEFAULT_SAMPLE_RATE
         self.paused = False
         self.current_position = 0
+
+''' use player instead of this so no need for later uses
+import sounddevice as sd
+import numpy as np
+from scipy.io.wavfile import read
 
     # this is a super long method so i just used helper methods for increased readablity
     # def play_song(self):
@@ -193,3 +193,4 @@ class Song:
         if not self.paused:
             self.stop_song()
             self.play_song()
+'''

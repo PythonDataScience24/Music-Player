@@ -1,5 +1,7 @@
 pip install pandas
 pip install customtkinter
 pip install pygame
-pip install scipy
-pip install sounddevice
+
+# not necessary cuz using player instead of songs method
+#pip install scipy
+#pip install sounddevice

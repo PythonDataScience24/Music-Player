@@ -3,7 +3,7 @@ Abstraction example:
     - get_library:
         here the user only sees what what we want them to see. We want them to only see the dataframe with
         its songs and information about it. Therefore, we returned the entire library formatted according
-        to the original dataframe. This then encapsulates the loading and saving of the dataframe, as the
+        to the filters applied to the original dataframe. This then encapsulates the loading and saving of the dataframe, as the
         user is not supposed to interact with this process.
     - get_song:
         here we only want the user to get the information relevant to them in form of a dictionairy entry.

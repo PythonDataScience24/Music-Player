@@ -1,3 +1,2 @@
 title,artist,genre,year,album,file_path,id,audio_data,sample_rate,paused,current_position
-Tear up the Sky,the young gods,punk,2020,album,/Users/massimilianovella/Desktop/UNIVERSITÄT/Informatik/Semester 6/Programming for Data Science/Music-Player/sampleData/sampleSongsForDatabase/02 Tear Up the Red Sky.wav,1,,44100,False,0
-as,df,gf,,,/Users/massimilianovella/Desktop/UNIVERSITÄT/Informatik/Semester 6/Programming for Data Science/Music-Player/sampleData/sampleSongsForDatabase/01 Entre en MatiÃ¨re.wav,2,,44100,False,0
+adsf,sadf,asd,fads,fadsf,C:\jc\dvl\pyenv\work\project\Music-Player\sampleData\sampleSongsForDatabase\03 Figure Sans Nom.wav,1,,44100,False,0
