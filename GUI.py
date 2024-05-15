@@ -308,11 +308,10 @@ class SongPlayer(tk.Frame):
             self.manual_slider_update = False
 
         def update_slider(self):
-            if not self.manual_slider_update:
-                while not self.player.stop_update_thread.is_set():
-                    if self.player.is_playing():
-                        self.playbackSlider.set(self.player.get_position())
-                    time.sleep(1)  # Adjust the sleep duration as needed for smoother updating
+            while not self.player.stop_update_thread.is_set():
+                if self.player.is_playing() and not self.manual_slider_update:
+                    self.playbackSlider.set(self.player.get_position())
+                time.sleep(0.1)  # Adjust the sleep duration as needed for smoother updating
 
         def stop_thread(self):
             self.player.stop_update_thread.set()  # Set the flag to stop the thread
