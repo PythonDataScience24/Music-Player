@@ -3,8 +3,7 @@ import customtkinter as ctk
 from Player import Player
 from Song import Song
 import MusicDatabase
-import threading
-import time
+
 
 #pip install customtkinter
 
@@ -106,13 +105,13 @@ class SongPlayer(tk.Frame):
             self.song = None
             self.parent = parent
             self.player = Player()
-            self.manual_slider_update = False
+            self.update_slider()
 
 
 
             #add volume slider
             self.volumeSlider = ctk.CTkSlider(self, from_=0, to=100, command=self.set_volume)
-            self.volumeSlider.set(10)
+            self.volumeSlider.set(0)
             self.volumeSlider.grid(row=3, column=0, columnspan=6)
 
             self.set_volume(self.volumeSlider.get())
@@ -122,9 +121,6 @@ class SongPlayer(tk.Frame):
             self.playbackSlider.set(0)
             self.playbackSlider.grid(row=4, column=0, columnspan=6)
 
-            #player updatePositionEvent = setPlaybackSliderPosition
-            self.update_thread = threading.Thread(target=self.update_slider)
-            self.update_thread.start()
 
 
     
@@ -303,28 +299,17 @@ class SongPlayer(tk.Frame):
                 self.song.volume = self.volume """
             
         def set_playback(self, value):
-            self.manual_slider_update = True
             self.player.set_position(value)
-            self.manual_slider_update = False
 
         def update_slider(self):
-            while not self.player.stop_update_thread.is_set():
-                if self.player.is_playing() and not self.manual_slider_update:
-                    self.playbackSlider.set(self.player.get_position())
-                time.sleep(0.1)  # Adjust the sleep duration as needed for smoother updating
+            if self.player.is_playing():
+                self.playbackSlider.set(self.player.get_position())
+            self.after(100, self.update_slider)
 
-        def stop_thread(self):
-            self.player.stop_update_thread.set()  # Set the flag to stop the thread
-            self.update_thread.join()  # Wait for the thread to finish
 
 
 #Create the main application
 class  App(tk.Tk):
-    # func for closing thread
-    def cleanup(self):
-        self.songplayer.stop_thread()  # Stop the update thread before closing
-        self.destroy()  # Destroy the Tkinter window
-
     #initialize the main application
     def __init__(self):
         super().__init__()
@@ -339,8 +324,6 @@ class  App(tk.Tk):
 
         self.listview = ScrollableListbox(self, self.musicDB, self.songplayer)
         self.listview.place(relx=0.1, rely=0.1, relwidth=0.8)
-
-        self.protocol("WM_DELETE_WINDOW", self.cleanup)  # Call cleanup when the window is closed
 
         self.mainloop()
 

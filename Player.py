@@ -1,6 +1,6 @@
 import pygame.mixer
 import pygame
-import threading
+
 
 class Player:
     def __init__(self):
@@ -9,7 +9,7 @@ class Player:
         self.current_song = None
         self.slider_position = 0
         self.song_length = 0
-        self.stop_update_thread = threading.Event()
+        self.offset = 0
 
     def play_song(self, song):
         if self.current_song:
@@ -27,7 +27,6 @@ class Player:
 
     def stop_song(self):
         pygame.mixer.music.stop()
-        self.stop_update_thread.set()  # Signal the update thread to stop
 
     def is_playing(self):
         return pygame.mixer.music.get_busy()
@@ -37,7 +36,9 @@ class Player:
 
     def set_position(self, value):
         if self.current_song:
+            self.offset = value - ((100/(self.song_length*1000)) * pygame.mixer.music.get_pos())
             pygame.mixer.music.set_pos(value * (self.song_length/100))
 
     def get_position(self):
-        return pygame.mixer.music.get_pos() / 1000 / self.song_length * 100
+        if self.current_song:
+            return ((100/(self.song_length*1000)) * pygame.mixer.music.get_pos()) + self.offset
