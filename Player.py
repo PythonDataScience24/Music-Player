@@ -14,6 +14,7 @@ class Player:
 
 
     def play_song(self, song):
+        self.offset = 0
         if self.current_song:
             pygame.mixer.music.stop()
         self.current_song = song
