@@ -106,6 +106,7 @@ class SongPlayer(tk.Frame):
             self.song = None
             self.parent = parent
             self.player = Player()
+            self.manual_slider_update = False
 
 
 
@@ -302,13 +303,16 @@ class SongPlayer(tk.Frame):
                 self.song.volume = self.volume """
             
         def set_playback(self, value):
+            self.manual_slider_update = True
             self.player.set_position(value)
+            self.manual_slider_update = False
 
         def update_slider(self):
-            while not self.player.stop_update_thread.is_set():
-                if self.player.is_playing():
-                    self.playbackSlider.set(self.player.get_position())
-                time.sleep(1)  # Adjust the sleep duration as needed for smoother updating
+            if not self.manual_slider_update:
+                while not self.player.stop_update_thread.is_set():
+                    if self.player.is_playing():
+                        self.playbackSlider.set(self.player.get_position())
+                    time.sleep(1)  # Adjust the sleep duration as needed for smoother updating
 
         def stop_thread(self):
             self.player.stop_update_thread.set()  # Set the flag to stop the thread
