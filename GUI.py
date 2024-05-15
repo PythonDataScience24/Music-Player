@@ -341,8 +341,7 @@ class  App(tk.Tk):
 
             def config_filter():
                 song = Song(title.get(), artist.get(), genre.get(), year.get(), album.get(), None, None)
-
-                self.musicDB.filter(song)# needs to add possiblity to add arguments
+                self.musicDB.filterdf(song)# needs to add possiblity to add arguments
                 self.listview.update_listbox()
                 popup.destroy()
                 

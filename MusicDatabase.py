@@ -23,7 +23,8 @@ class MusicDatabase:
         self.dummy_song = Song(title="", artist= "", genre="", year="", album="", file_path="", id=None)  # Create a dummy Song instance
         # set up the music library --> load an existing dataframe or create a new one
         self.music_library = self.load_dataframe()
-        self.df = self.filterdf(self.dummy_song)
+        self.df = self.music_library
+        self.filterdf(self.dummy_song)
 
     # load the dataframe if possible and if not then create a dataframe
     def load_dataframe(self):
@@ -141,6 +142,7 @@ class MusicDatabase:
             List[Song]: An array of Song objects.
         '''
         library = []
+        self.filterdf(self.dummy_song)
         for _, row in self.df.iterrows():
             song = Song(
                 row['title'],
@@ -155,18 +157,18 @@ class MusicDatabase:
         return library
     
     def filterdf(self, song: Song):
-        filtered_df = self.music_library.copy()
-        if not song.title is None:
-            filtered_df = filtered_df[filtered_df['title'] == song.title]
-        elif not song.artist is None:
-            filtered_df = filtered_df[filtered_df['artist'] == song.artist]
-        elif not song.genre is None:
-            filtered_df = filtered_df[filtered_df['genre'] == song.genre]
-        elif not song.year is None:
-            filtered_df = filtered_df[filtered_df['year'] == song.year]
-        elif not song.album is None:
-            filtered_df = filtered_df[filtered_df['album'] == song.album]
-        return filtered_df
+        self.df = self.music_library
+        self.dummy_song = song
+        if song.title is not None and song.title != "":
+            self.df = self.df[self.df['title'] == song.title]
+        if song.artist is not None and song.artist != "":
+            self.df = self.df[self.df['artist'] == song.artist]
+        if song.genre is not None and song.genre != "":
+            self.df = self.df[self.df['genre'] == song.genre]
+        if song.year is not None and song.year != "":
+            self.df = self.df[self.df['year'] == song.year]
+        if song.album is not None and song.album != "":
+            self.df = self.df[self.df['album'] == song.album]
 
     def get_song_info(self, id):
         '''

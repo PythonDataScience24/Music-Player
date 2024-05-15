@@ -12,6 +12,7 @@ class Player:
         self.song_length = 0
         self.offset = 0
 
+
     def play_song(self, song):
         if self.current_song:
             pygame.mixer.music.stop()
@@ -32,13 +33,22 @@ class Player:
     def is_playing(self):
         return pygame.mixer.music.get_busy()
     
+    def is_paused(self):
+        return pygame.mixer.music.get_busy() and pygame.mixer.music.get_pos() == -1
+    
+    def is_dead(self):
+        return pygame.mixer.music.get_pos() in (0, self.song_length * 1000)
+    
     def set_volume(self, volume):
         pygame.mixer.music.set_volume(volume/100)
 
     def set_position(self, value):
         if self.current_song:
-            self.offset = value - ((100/(self.song_length*1000)) * pygame.mixer.music.get_pos())
-            pygame.mixer.music.set_pos(value * (self.song_length/100))
+            try:
+                self.offset = value - ((100/(self.song_length*1000)) * pygame.mixer.music.get_pos())
+                pygame.mixer.music.set_pos(value * (self.song_length/100))
+            except pygame.error:
+                pass
 
     def get_position(self):
         if self.current_song:
