@@ -168,3 +168,75 @@ Details:
 	"endColumn": 1
 }]
 Fix= add newline
+
+Message: Variable name "sortedDataframe" doesn't conform to snake_case naming style
+Details:
+[{
+	"resource": "/Users/massimilianovella/Desktop/UNIVERSITÄT/Informatik/Semester 6/Programming for Data Science/Music-Player/dataframeManipulation.py",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": {
+		"value": "C0103:invalid-name",
+		"target": {
+			"$mid": 1,
+			"path": "/en/latest/user_guide/messages/convention/invalid-name.html",
+			"scheme": "https",
+			"authority": "pylint.readthedocs.io"
+		}
+	},
+	"severity": 2,
+	"message": "Variable name \"sortedDataframe\" doesn't conform to snake_case naming style",
+	"source": "Pylint",
+	"startLineNumber": 31,
+	"startColumn": 13,
+	"endLineNumber": 31,
+	"endColumn": 28
+}]
+Fix= change sortedDataframe to sorted_dataframe
+
+Message: Line too long (109/100)
+Details:
+[{
+	"resource": "/Users/massimilianovella/Desktop/UNIVERSITÄT/Informatik/Semester 6/Programming for Data Science/Music-Player/dataframeManipulation.py",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": {
+		"value": "C0301:line-too-long",
+		"target": {
+			"$mid": 1,
+			"path": "/en/latest/user_guide/messages/convention/line-too-long.html",
+			"scheme": "https",
+			"authority": "pylint.readthedocs.io"
+		}
+	},
+	"severity": 2,
+	"message": "Line too long (109/100)",
+	"source": "Pylint",
+	"startLineNumber": 4,
+	"startColumn": 1,
+	"endLineNumber": 4,
+	"endColumn": 1
+}]
+Fix= add a newline to split up the text on 2 lines
+
+Message: standard import "import csv" should be placed before "import pandas as pd"
+Details:
+[{
+	"resource": "/Users/massimilianovella/Desktop/UNIVERSITÄT/Informatik/Semester 6/Programming for Data Science/Music-Player/MusicDatabase.py",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": {
+		"value": "C0411:wrong-import-order",
+		"target": {
+			"$mid": 1,
+			"path": "/en/latest/user_guide/messages/convention/wrong-import-order.html",
+			"scheme": "https",
+			"authority": "pylint.readthedocs.io"
+		}
+	},
+	"severity": 2,
+	"message": "standard import \"import csv\" should be placed before \"import pandas as pd\"",
+	"source": "Pylint",
+	"startLineNumber": 2,
+	"startColumn": 1,
+	"endLineNumber": 2,
+	"endColumn": 11
+}]
+Fix= switch around the imports so that import csv is before the pandas import

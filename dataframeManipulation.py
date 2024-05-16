@@ -1,7 +1,8 @@
 # in this file every function that manipulates the data frame in any shape or form
 
 def filter_dataframe (df):
-    """filter the dataframe according to user input and return the dataframe according to the filter expected
+    """filter the dataframe according to user input and return the dataframe 
+    according to the filter expected
 
         Args:
             df (pandas dataframe): the dataframe that saved all the information of the local music library
@@ -17,26 +18,26 @@ def filter_dataframe (df):
     while choice != origin_state:
         if choice == 1:
             genre = input("Enter the genre of choice: ")
-            sortedDataframe = df[df['genre'] == genre]
+            sorted_dataframe = df[df['genre'] == genre]
             choice = 0
         elif choice == 2:
             artist = input("Enter the artist you're searching for: ")
-            sortedDataframe = df[df['artist'] == artist]
+            sorted_dataframe = df[df['artist'] == artist]
             choice = 0
         elif choice == 3:
             year = input("Enter the year from the songs you want to listen to: ")
-            sortedDataframe = df[df['year'] == year]
+            sorted_dataframe = df[df['year'] == year]
             choice = 0
         elif choice == 4:
-            sortedDataframe = df
+            sorted_dataframe = df
             choice = 0
         else:
             # throws me out without giving print message but this error message: " ValueError: invalid literal for int() with base 10: '' "
             print('invalid choice! please enter again')
             choice = 0
-    return sortedDataframe
+    return sorted_dataframe
 
-# helper methods for the filtering    
+# helper methods for the filtering   
 def askFilters ():
     """helper method that displays the possible filters and asks the user for their choice
     Returns:
