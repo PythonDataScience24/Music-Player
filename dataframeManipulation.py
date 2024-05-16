@@ -10,11 +10,11 @@ def filter_dataframe (df):
             sortedDataFrame (dataframe): the dataframe sorted by the users choice
         """
     # initialise an origin state so that our while loop can later stop accordingly!
-    originState = 0
+    origin_state = 0
     # grab the choice through the helper method!
     choice = askFilters()
 
-    while choice != originState:
+    while choice != origin_state:
         if choice == 1:
             genre = input("Enter the genre of choice: ")
             sortedDataframe = df[df['genre'] == genre]
@@ -36,8 +36,7 @@ def filter_dataframe (df):
             choice = 0
     return sortedDataframe
 
-# helper methods for the filtering
-    
+# helper methods for the filtering    
 def askFilters ():
     """helper method that displays the possible filters and asks the user for their choice
     Returns:

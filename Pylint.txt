@@ -93,3 +93,78 @@ Details:
 	"endColumn": 1
 }]
 Fix= shorten the comment behind the line and place it above the according code line
+
+
+Message: Variable name "originState" doesn't conform to snake_case naming style
+Details:
+[{
+	"resource": "/Users/massimilianovella/Desktop/UNIVERSITÄT/Informatik/Semester 6/Programming for Data Science/Music-Player/dataframeManipulation.py",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": {
+		"value": "C0103:invalid-name",
+		"target": {
+			"$mid": 1,
+			"external": "https://pylint.readthedocs.io/en/latest/user_guide/messages/convention/invalid-name.html",
+			"path": "/en/latest/user_guide/messages/convention/invalid-name.html",
+			"scheme": "https",
+			"authority": "pylint.readthedocs.io"
+		}
+	},
+	"severity": 2,
+	"message": "Variable name \"originState\" doesn't conform to snake_case naming style",
+	"source": "Pylint",
+	"startLineNumber": 13,
+	"startColumn": 5,
+	"endLineNumber": 13,
+	"endColumn": 16
+}]
+Fix= change originState to origin_state
+
+Message: Trailing whitespace
+Details:
+[{
+	"resource": "/Users/massimilianovella/Desktop/UNIVERSITÄT/Informatik/Semester 6/Programming for Data Science/Music-Player/dataframeManipulation.py",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": {
+		"value": "C0303:trailing-whitespace",
+		"target": {
+			"$mid": 1,
+			"path": "/en/latest/user_guide/messages/convention/trailing-whitespace.html",
+			"scheme": "https",
+			"authority": "pylint.readthedocs.io"
+		}
+	},
+	"severity": 2,
+	"message": "Trailing whitespace",
+	"source": "Pylint",
+	"startLineNumber": 40,
+	"startColumn": 1,
+	"endLineNumber": 40,
+	"endColumn": 1
+}]
+Fix= delete the whitespace
+
+
+Message: Final newline missing
+Details:
+[{
+	"resource": "/Users/massimilianovella/Desktop/UNIVERSITÄT/Informatik/Semester 6/Programming for Data Science/Music-Player/dataframeManipulation.py",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": {
+		"value": "C0304:missing-final-newline",
+		"target": {
+			"$mid": 1,
+			"path": "/en/latest/user_guide/messages/convention/missing-final-newline.html",
+			"scheme": "https",
+			"authority": "pylint.readthedocs.io"
+		}
+	},
+	"severity": 2,
+	"message": "Final newline missing",
+	"source": "Pylint",
+	"startLineNumber": 52,
+	"startColumn": 1,
+	"endLineNumber": 52,
+	"endColumn": 1
+}]
+Fix= add newline
