@@ -1,6 +1,7 @@
-pip install pandas
-pip install customtkinter
-pip install pygame
+pandas
+customtkinter
+pygame
+python==3.*
 
 # not necessary cuz using player instead of songs method
 #pip install scipy
