@@ -24,7 +24,7 @@ class TestMusicDatabase (unittest.TestCase):
     #test if the creation of a dataframe is working correctly
     def test_initialization_and_csv_creation(self):
         self.assertTrue(os.path.exists("music_library.csv"))
-        df = pd.read_csv("music_library.csv")
+        df = self.db.load_dataframe()
         self.assertTrue(df.empty)
 
     #test if adding a song works
