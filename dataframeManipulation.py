@@ -1,4 +1,7 @@
 # in this file every function that manipulates the data frame in any shape or form
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy.io.wavfile import read
 
 def filter_dataframe (df):
     """filter the dataframe according to user input and return the dataframe 
@@ -51,3 +54,29 @@ def askFilters ():
     # save the input of the user
     choice = int(input("Please enter your choice by typing 1-4: "))
     return choice
+
+def plot_song (song):
+    # max time of 10 seconds to be plotted
+    max_time = 10
+    # assign audio_data to the song object and then assign it to the data to plot
+    song.audio_data = read(song.file_path)
+    sound_data = song.audio_data
+    # calculate the length of the song
+    song_length = len(sound_data) / song.sample_rate
+
+    # Select data for plotting based on max_time
+    num_samples = int(min(song_length, max_time) * song.sample_rate)
+    plot_data = sound_data[:num_samples]
+
+    # define time_axis based on max_time
+    time_axis = np.linspace(0, max_time, len(plot_data))
+    
+    #create the plot
+     # Create the plot
+    plt.plot(time_axis, plot_data)
+    plt.xlabel("Time (seconds)")
+    plt.ylabel("Amplitude")
+    plt.title(f"Waveform of {song.title} (Limited to {max_time} seconds)")
+    plt.xlim(0, max_time)
+    plt.grid(True)
+    plt.show()
