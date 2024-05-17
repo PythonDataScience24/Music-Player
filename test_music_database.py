@@ -68,11 +68,13 @@ class TestMusicDatabase (unittest.TestCase):
     
     # test if we can get the right information of the according song instance
     def test_get_song_info(self):
-        """Test getting song info by ID."""
+        # add song instance to the dataframe
         song = Song(title="Test Song", artist="Test Artist", genre="Test Genre", year="2024", album="Test Album", file_path="test_path.wav")
         self.db.add_song(song)
+        # grab the song_id and _info
         song_id = self.db.music_library['id'][0]
         song_info = self.db.get_song_info(song_id)
+        # check if the info is existent and if it is correct
         self.assertIsNotNone(song_info)
         self.assertEqual(song_info['title'], "Test Song")
         self.assertEqual(song_info['artist'], "Test Artist")
