@@ -230,7 +230,7 @@ class MusicDatabase:
             )
         return None
     
-    def plot_song (song):
+    def plot_song (self, song):
         # max time of 10 seconds to be plotted
         max_time = 10
         # assign audio_data to the song object and then assign it to the data to plot
@@ -255,3 +255,33 @@ class MusicDatabase:
         plt.xlim(0, max_time)
         plt.grid(True)
         plt.show()
+
+
+    def plot_song_frame(self, song):
+        # max time of 10 seconds to be plotted
+        max_time = 10
+
+        # assign audio_data to the song object and then assign it to the data to plot
+        song.audio_data = read(song.file_path)[1]
+        sound_data = song.audio_data
+
+        # calculate the length of the song
+        song_length = len(sound_data) / song.sample_rate
+
+        # Select data for plotting based on max_time
+        num_samples = int(min(song_length, max_time) * song.sample_rate)
+        plot_data = sound_data[:num_samples]
+
+        # define time_axis based on max_time
+        time_axis = np.linspace(0, max_time, len(plot_data))
+
+        # Create the plot
+        fig, ax = plt.subplots()
+        ax.plot(time_axis, plot_data)
+        ax.set_xlabel("Time (seconds)")
+        ax.set_ylabel("Amplitude")
+        ax.set_title(f"Waveform of {song.title} (Limited to {max_time} seconds)")
+        ax.set_xlim(0, max_time)
+        ax.grid(True)
+
+        return fig
