@@ -154,6 +154,7 @@ class SongPlayer(tk.Frame):
             self.AddButton.grid(row=1, column=0)
             self.RemoveButton.grid(row=2, column=0)
             self.InfoButton.grid(row=2, column=4)
+            
     
 
         def setPlaybackSliderPosition(self, position):
@@ -192,7 +193,7 @@ class SongPlayer(tk.Frame):
                 #open a popup window with the song info
                 popup = tk.Toplevel()
                 popup.title("Song Info")
-                popup.geometry("400x400")
+                popup.geometry("800x600")
 
                 title_label = tk.Label(popup, text=f"Title: {self.song.title}")
                 title_label.pack()
@@ -223,10 +224,15 @@ class SongPlayer(tk.Frame):
                     canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
                 except Exception as e:
-                    print(f"Error plotting song: {e}")
+                    texto = f"Error plotting song: {e}" 
+                    errormessage = tk.Label(popup, text=texto, fg="red")
+                    errormessage.pack()
+                
 
                 close_button = ctk.CTkButton(popup, text="Close", command=popup.destroy)
                 close_button.pack()
+
+                popup.update()
 
                 return self.song
             else:  
@@ -415,7 +421,7 @@ class  App(tk.Tk):
         self.musicDB = MusicDatabase.MusicDatabase()
 
         self.songplayer = SongPlayer(self)
-        self.songplayer.place(relx=0.3, rely=0.7, relwidth=1)
+        self.songplayer.place(relx= 0.3,rely=0.7, relwidth=1)
 
         self.listview = ScrollableListbox(self, self.musicDB, self.songplayer)
         self.listview.place(relx=0.1, rely=0.1, relwidth=0.8)
