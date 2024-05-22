@@ -237,6 +237,8 @@ class SongPlayer(tk.Frame):
                 close_button = ctk.CTkButton(popup, text="Close", command=popup.destroy)
                 close_button.pack()
 
+
+
                 popup.update()
 
                 return self.song
@@ -351,10 +353,8 @@ class SongPlayer(tk.Frame):
             
             def select_file():
                 filename = filedialog.askopenfilename()
-                file_path.configure(state='normal')
                 file_path.delete(0, tk.END)
                 file_path.insert(0, filename)
-                file_path.configure(state='disabled')
                 
 
             title = add_labels_and_entries("Title")
@@ -370,7 +370,7 @@ class SongPlayer(tk.Frame):
             file_select_button = ctk.CTkButton(file_frame, text="Select File", command=select_file)
             file_select_button.pack(side=tk.LEFT)
 
-            file_path = tk.Entry(file_frame, state='disabled')
+            file_path = tk.Entry(file_frame)
             file_path.pack(side=tk.RIGHT)
 
             
