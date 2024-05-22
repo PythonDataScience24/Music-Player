@@ -13,7 +13,7 @@ To get started with S-Wave, follow these steps:
 1. Clone the S-Wave repository to your local machine.
 2. Install the necessary dependencies listed in the requirements.txt file.
 3. Run the main application file **GUI.py** to launch S-Wave. This should open a tkinter GUI as a popup window.
-4. Upload your *.mov* files and add metadata to create your personalized music library with the simple ADD button in the GUI.
+4. Upload your *.wav* files and add metadata to create your personalized music library with the simple ADD button in the GUI.
 5. Explore the various features of the GUI, including music playback, amplification, and visualization of soundwaves.
 
 ## Key Resources
