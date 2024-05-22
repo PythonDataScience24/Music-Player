@@ -1,14 +1,14 @@
 import tkinter as tk
 from tkinter import filedialog
 
-import customtkinter as ctk
-from Player import Player
-from Song import Song
-import MusicDatabase
+import customtkinter as ctk #dont use this library, it is not woth it
 
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-#pip install customtkinter
+
+from Player import Player
+from Song import Song
+import MusicDatabase
 
 
 #This script creates a basic GUI to display and manage the list of songs and control the playback.
