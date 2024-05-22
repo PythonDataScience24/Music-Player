@@ -6,7 +6,7 @@ from Player import Player
 from Song import Song
 import MusicDatabase
 
-from dataframeManipulation import plot_song_tk
+from dataframeManipulation import plot_song
 
 #pip install customtkinter
 
@@ -213,8 +213,11 @@ class SongPlayer(tk.Frame):
                 file_path_label.pack()
 
                 #show plot
-                plot_song_tk(self.song, popup)
 
+                try:
+                    plot_song(self.song)  
+                except Exception as e:
+                    print(f"Error plotting song: {e}")
 
                 close_button = ctk.CTkButton(popup, text="Close", command=popup.destroy)
                 close_button.pack()
