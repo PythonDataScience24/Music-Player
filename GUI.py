@@ -4,7 +4,6 @@ from Player import Player
 from Song import Song
 import MusicDatabase
 
-
 #pip install customtkinter
 
 
@@ -33,10 +32,7 @@ class ScrollableListbox(tk.Frame):
             songPlayer (SongPlayer): An instance of the SongPlayer class.
             *args: Variable length argument list.
             **kwargs: Arbitrary keyword arguments.
-
-
         '''
-
 
         tk.Frame.__init__(self, parent, *args, **kwargs)
         self.scrollbar = tk.Scrollbar(self)
@@ -58,21 +54,26 @@ class ScrollableListbox(tk.Frame):
         self.update_listbox()
 
     def update_listbox(self):
+        '''
+        Updates the listbox with the songs from the music database.
+        '''
+
         self.listbox.delete(0, tk.END)
 
         self.library = self.musicDB.get_library()
 
-        #temporary library
-        #self.library = [Song("Song1", "Artist1", "Genre1", 2021, "Album1", "path1"), Song("Song2", "Artist2", "Genre2", 2022, "Album2", "path2")]
-
-        #do a for loop that does self.musicDB.get_length() times. if 0 times, it will not do anything
         for song in self.library:
-
             self.listbox.insert(tk.END, song.title)
             
 
     def get_selected(self):
-        #return the identifier of the selected
+        '''
+        Returns the selected song from the listbox.
+
+        Returns:
+            Song: The selected song.
+        '''
+
         index = self.listbox.curselection()
         if index:  # if there is a selection
             return self.library[index] # return the song at index
@@ -80,6 +81,14 @@ class ScrollableListbox(tk.Frame):
             return None
     
     def on_double_click(self, event):
+        '''
+        Handles the double click event on a song in the listbox.
+        Assigns the selected song to the songplayer and starts playback.
+
+        Args:
+            event (tk.Event): The double click event.
+        '''
+
         index = self.listbox.nearest(event.y)
         song = self.library[index]
         print(f"You double-clicked {song}!")
@@ -107,16 +116,12 @@ class SongPlayer(tk.Frame):
             self.player = Player()
             self.update_slider()
 
-
-
             #add volume slider
-
             self.volumelabel = tk.Label(self, text='Volume')
             self.volumelabel.grid(row=3, column=0)
             self.volumeSlider = ctk.CTkSlider(self, from_=0, to=100, command=self.set_volume)
             self.volumeSlider.set(0)
             self.volumeSlider.grid(row=3, column=1, columnspan=6)
-
             self.set_volume(self.volumeSlider.get())
 
             #add playback position slider
@@ -126,9 +131,6 @@ class SongPlayer(tk.Frame):
             self.playbackSlider.set(0)
             self.playbackSlider.grid(row=4, column=1, columnspan=6)
 
-
-
-    
             self.titleLabel = ctk.CTkLabel(self, text="No Song Selected", width=20, font=("Arial", 12, "bold"))
             self.artistLabel = ctk.CTkLabel(self, text="Unkown Artist", width=20, font=("Arial", 10))
 
@@ -152,10 +154,24 @@ class SongPlayer(tk.Frame):
     
 
         def setPlaybackSliderPosition(self, position):
+            '''
+            Sets the position of the playback slider.
+
+            Args:
+                position (float): The position value.
+            '''
+
             self.playbackSlider.set(position)
 
 
         def select_song(self, song: Song):
+            '''
+            Selects a song and updates the song player UI.
+
+            Args:
+                song (Song): The selected song.
+            '''
+
             self.song = song
             self.titleLabel.configure(text=song.title)
             self.artistLabel.configure(text=song.artist)
@@ -163,6 +179,10 @@ class SongPlayer(tk.Frame):
 
           
         def get_song_info(self):
+            '''
+            Displays the information of the selected song in a popup window.
+            '''
+
             if self.song:
                 print("Info button clicked!")
 
@@ -183,7 +203,6 @@ class SongPlayer(tk.Frame):
                 year_label = tk.Label(popup, text=f"Year: {self.song.year}")
                 year_label.pack()
 
-
                 album_label = tk.Label(popup, text=f"Album: {self.song.album}")
                 album_label.pack()
 
@@ -193,13 +212,15 @@ class SongPlayer(tk.Frame):
                 close_button = ctk.CTkButton(popup, text="Close", command=popup.destroy)
                 close_button.pack()
 
-
                 return self.song
             else:  
                 print("No song selected!")
     
         def play_song(self):
-            # check if song selected and if playing or not
+            '''
+            Plays or pauses the selected song.
+            '''
+
             if self.song:
                 if self.player.is_playing():
                     self.player.pause_song()
@@ -211,6 +232,10 @@ class SongPlayer(tk.Frame):
                 
     
         def forward_song(self):
+            '''
+            Plays the next song in the playlist.
+            '''
+
             if self.song:
                 print(f"Playing next song after {self.song}")   
 
@@ -218,17 +243,29 @@ class SongPlayer(tk.Frame):
                 print("No song selected!")
     
         def backward_song(self):
+            '''
+            Plays the previous song in the playlist.
+            '''
+
             if self.song:
-                print(f"Playing next song after {self.song}")   
+                print(f"Playing previous song before {self.song}")   
 
             else:
                 print("No song selected!")
     
         def add_song(self):
+            '''
+            Adds a new song to the music database.
+            '''
+
             self.add_item_with_popup()
 
     
         def remove_song(self):
+            '''
+            Removes the selected song from the music database.
+            '''
+
             if self.song:
                 self.remove_item_with_confirmation()
             else:
@@ -236,16 +273,16 @@ class SongPlayer(tk.Frame):
 
 
         def remove_item_with_confirmation(self):
-            #selected_item = self.listview.get_selected()
+            '''
+            Displays a confirmation popup before removing the selected song.
+            '''
 
             def confirm_delete():
-                #self.listview.remove_item(selected_item)
                 self.parent.musicDB.remove_song(self.song.id)
                 self.parent.listview.update_listbox()
                 popup.destroy()
 
             popup = tk.Toplevel()
-            #popup.overrideredirect(True)
             popup.title("Confirmation")
 
             message_label = tk.Label(popup, text=f"Are you sure you want to delete {self.song}?")
@@ -259,17 +296,19 @@ class SongPlayer(tk.Frame):
 
 
         def add_item_with_popup(self):
+            '''
+            Displays a popup window to add a new song to the music database.
+            '''
 
             def add_item():
                 song = Song(title.get(), artist.get(), genre.get(), year.get(), album.get(), file_path.get(), None)
 
-                self.parent.musicDB.add_song(song)# needs to add possiblity to add arguments
+                self.parent.musicDB.add_song(song)
                 self.parent.listview.update_listbox()
                 popup.destroy()
                 
 
             popup = tk.Toplevel()
-            #popup.overrideredirect(True)
             popup.title("Add Item")
             
             def add_labels_and_entries(text):
@@ -298,15 +337,30 @@ class SongPlayer(tk.Frame):
             cancel_button.pack()
 
         def set_volume(self, value):
+            '''
+            Sets the volume of the song player.
+
+            Args:
+                value (float): The volume value.
+            '''
+
             self.player.set_volume(value)
-            #player.setVolume(volume)
-            """ if self.song:
-                self.song.volume = self.volume """
             
         def set_playback(self, value):
+            '''
+            Sets the playback position of the song player.
+
+            Args:
+                value (float): The playback position value.
+            '''
+
             self.player.set_position(value)
 
         def update_slider(self):
+            '''
+            Updates the playback slider position periodically.
+            '''
+
             if self.player.is_playing():
                 self.playbackSlider.set(self.player.get_position())
             self.after(100, self.update_slider)
@@ -338,45 +392,46 @@ class  App(tk.Tk):
     #define the functions for the buttons
 
     def filter_songs(self):
+        '''
+        Filters the list of songs based on user input.
+        '''
 
-            def config_filter():
-                song = Song(title.get(), artist.get(), genre.get(), year.get(), album.get(), None, None)
-                self.musicDB.filterdf(song)# needs to add possiblity to add arguments
-                self.listview.update_listbox()
-                popup.destroy()
+        def config_filter():
+            song = Song(title.get(), artist.get(), genre.get(), year.get(), album.get(), None, None)
+            self.musicDB.filterdf(song)
+            self.listview.update_listbox()
+            popup.destroy()
                 
 
-            popup = tk.Toplevel()
-            #popup.overrideredirect(True)
-            popup.title("Filter List By:")
+        popup = tk.Toplevel()
+        popup.title("Filter List By:")
             
-            def add_labels_and_entries(text):
-                frame = tk.Frame(popup)
-                frame.pack()
+        def add_labels_and_entries(text):
+            frame = tk.Frame(popup)
+            frame.pack()
 
-                label = tk.Label(frame, text=text)
-                label.pack(side=tk.LEFT)
+            label = tk.Label(frame, text=text)
+            label.pack(side=tk.LEFT)
 
-                entry = tk.Entry(frame)
-                entry.pack(side=tk.RIGHT)
+            entry = tk.Entry(frame)
+            entry.pack(side=tk.RIGHT)
 
-                return entry
+            return entry
 
-            title = add_labels_and_entries("Title")
-            artist = add_labels_and_entries("Artist")
-            genre = add_labels_and_entries("Genre")
-            year = add_labels_and_entries("Year")
-            album = add_labels_and_entries("Album")
+        title = add_labels_and_entries("Title")
+        artist = add_labels_and_entries("Artist")
+        genre = add_labels_and_entries("Genre")
+        year = add_labels_and_entries("Year")
+        album = add_labels_and_entries("Album")
 
-            add_button = ctk.CTkButton(popup, text="Filter", command=config_filter)
-            add_button.pack()
+        add_button = ctk.CTkButton(popup, text="Filter", command=config_filter)
+        add_button.pack()
 
-            cancel_button = ctk.CTkButton(popup, text="Cancel", command=popup.destroy)
-            cancel_button.pack()
+        cancel_button = ctk.CTkButton(popup, text="Cancel", command=popup.destroy)
+        cancel_button.pack()
 
 
 #Run the application
 if __name__ == "__main__":
     app = App()
     app.mainloop()
-
