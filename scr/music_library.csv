@@ -1,0 +1,5 @@
+title,artist,genre,year,album,file_path,id,audio_data,sample_rate,paused,current_position
+sitnextome,artits,asd,1234,asd,/Users/christiangafner/Downloads/Foster The People - Sit Next to Me (Audio).mp3,2,,44100,False,0
+bnb,westy,asd,asd,nnotsozesty,/Users/christiangafner/Downloads/bnbtbdfotsyn.mp3,3,,44100,False,0
+sdf,sdf,sdf,2342,sdfsd,/Users/christiangafner/Documents/Sound Engineering/EDM/Zenhiser - Pro Psytrance Drum Loops/037_a__PPTDL_Zenhiser_145bpm.wav,4,,44100,False,0
+as,asd,asd,asd,asd,/Users/christiangafner/Desktop/datascience/GitHubRepo/sampleData/sampleSongsForDatabase/04 Moon Above.wav,5,,44100,False,0

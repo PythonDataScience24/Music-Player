@@ -4,6 +4,7 @@ from scipy.io.wavfile import read
 import csv
 import pandas as pd
 from Song import Song
+import os
 
 # in this file we set up the database/dataframe and save it. This will be the anchor point of the other files/functions
 
@@ -23,11 +24,13 @@ class MusicDatabase:
     '''
     def __init__ (self):
         # create a dummy song with empty values
+        self.csv_file_path = os.path.dirname(os.path.abspath(__file__)) + "/music_library.csv"
         self.dummy_song = Song(title="", artist= "", genre="", year="", album="", file_path="", id=None)  # Create a dummy Song instance
         # set up the music library --> load an existing dataframe or create a new one
         self.music_library = self.load_dataframe()
         self.df = self.music_library
         self.filterdf(self.dummy_song)
+        
 
     # load the dataframe if possible and if not then create a dataframe
     def load_dataframe(self):
@@ -42,11 +45,11 @@ class MusicDatabase:
         '''
         try:
         # Load the DataFrame from the CSV file
-            return pd.read_csv("music_library.csv")
+            return pd.read_csv(self.csv_file_path)
         except FileNotFoundError:
             # If the file doesn't exist, create empty DataFrame with defined columns
             self.create_csv_file()
-            return pd.read_csv("music_library.csv")
+            return pd.read_csv(self.csv_file_path)
 
 
     # save the dataframe --> use to save the newest version after adding or removing the songs
@@ -57,7 +60,7 @@ class MusicDatabase:
         Args:
             df (pandas dataframe): The music library DataFrame.
         '''
-        df.to_csv("music_library.csv", index=False)
+        df.to_csv(self.csv_file_path, index=False)
 
     # create csv file or not if it already exists
     def create_csv_file(self):
@@ -66,15 +69,15 @@ class MusicDatabase:
         '''
         headers = vars(self.dummy_song).keys()  # Get attributes of the dummy Song instance
         try:
-            with open("music_library.csv", 'x', newline='') as file:
+            with open(self.csv_file_path, 'x', newline='') as file:
                 writer = csv.DictWriter(file, fieldnames=headers)
                 writer.writeheader()
         except FileExistsError:
             # Check if the file is empty
-            with open("music_library.csv", 'r') as file:
+            with open(self.csv_file_path, 'r') as file:
                 if not file.read(1):
                     # File is empty, write headers
-                    with open("music_library.csv", 'w', newline='') as file:
+                    with open(self.csv_file_path, 'w', newline='') as file:
                         writer = csv.DictWriter(file, fieldnames=headers)
                         writer.writeheader()
     
