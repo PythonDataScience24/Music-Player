@@ -117,7 +117,10 @@ class SongPlayer(tk.Frame):
             self.song = None
             self.parent = parent
             self.player = Player()
+            self.bind("<Destroy>", self.stop_update_slider)
             self.update_slider()
+
+
 
             #add volume slider
             self.volumelabel = tk.Label(self, text='Volume')
@@ -194,6 +197,8 @@ class SongPlayer(tk.Frame):
                 popup = tk.Toplevel()
                 popup.title("Song Info")
                 popup.geometry("800x600")
+
+                
 
                 title_label = tk.Label(popup, text=f"Title: {self.song.title}")
                 title_label.pack()
@@ -403,11 +408,20 @@ class SongPlayer(tk.Frame):
             '''
             Updates the playback slider position periodically.
             '''
+            if self.winfo_exists(): 
 
-            if self.player.is_playing():
-                self.playbackSlider.set(self.player.get_position())
-            self.after(100, self.update_slider)
+                if self.player.is_playing():
+                    self.playbackSlider.set(self.player.get_position())
+                self.process = self.after(100, self.update_slider)
 
+        def stop_update_slider(self, event):
+            '''
+            Stops the update_slider method when the widget is destroyed.
+            '''
+            print("Stopping slider update")
+            self.player.stop_song()
+            self.after_cancel(self.process)
+        
 
 #Create the main application
 class  App(tk.Tk):
@@ -430,6 +444,7 @@ class  App(tk.Tk):
         self.filter.place(relx=0.1, rely=0.4, relwidth=0.2)
 
         self.mainloop()
+
 
     #define the functions for the buttons
 
