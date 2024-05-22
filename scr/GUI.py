@@ -421,6 +421,7 @@ class SongPlayer(tk.Frame):
             print("Stopping slider update")
             self.player.stop_song()
             self.after_cancel(self.process)
+            self.quit()
         
 
 #Create the main application
