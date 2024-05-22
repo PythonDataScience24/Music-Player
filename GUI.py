@@ -1,4 +1,6 @@
 import tkinter as tk
+from tkinter import filedialog
+
 import customtkinter as ctk
 from Player import Player
 from Song import Song
@@ -94,7 +96,6 @@ class ScrollableListbox(tk.Frame):
         print(f"You double-clicked {song}!")
         self.songPlayer.select_song(song)   
         #self.songPlayer.play_song()
- 
 
 #SongPlayer class
 class SongPlayer(tk.Frame):
@@ -120,7 +121,7 @@ class SongPlayer(tk.Frame):
             self.volumelabel = tk.Label(self, text='Volume')
             self.volumelabel.grid(row=3, column=0)
             self.volumeSlider = ctk.CTkSlider(self, from_=0, to=100, command=self.set_volume)
-            self.volumeSlider.set(0)
+            self.volumeSlider.set(10)
             self.volumeSlider.grid(row=3, column=1, columnspan=6)
             self.set_volume(self.volumeSlider.get())
 
@@ -229,8 +230,6 @@ class SongPlayer(tk.Frame):
                 
             else:
                 print("No song selected!")
-                
-    
         def forward_song(self):
             '''
             Plays the next song in the playlist.
@@ -260,7 +259,6 @@ class SongPlayer(tk.Frame):
 
             self.add_item_with_popup()
 
-    
         def remove_song(self):
             '''
             Removes the selected song from the music database.
@@ -270,6 +268,7 @@ class SongPlayer(tk.Frame):
                 self.remove_item_with_confirmation()
             else:
                 print("No song selected!")
+
 
 
         def remove_item_with_confirmation(self):
@@ -322,13 +321,35 @@ class SongPlayer(tk.Frame):
                 entry.pack(side=tk.RIGHT)
 
                 return entry
+            
+            def select_file():
+                filename = filedialog.askopenfilename()
+                file_path.configure(state='normal')
+                file_path.delete(0, tk.END)
+                file_path.insert(0, filename)
+                file_path.configure(state='disabled')
+                
 
             title = add_labels_and_entries("Title")
             artist = add_labels_and_entries("Artist")
             genre = add_labels_and_entries("Genre")
             year = add_labels_and_entries("Year")
             album = add_labels_and_entries("Album")
-            file_path = add_labels_and_entries("File Path")
+
+            #add field to select file
+            file_frame = tk.Frame(popup)
+            file_frame.pack()
+
+            file_select_button = ctk.CTkButton(file_frame, text="Select File", command=select_file)
+            file_select_button.pack(side=tk.LEFT)
+
+            file_path = tk.Entry(file_frame, state='disabled')
+            file_path.pack(side=tk.RIGHT)
+
+            
+
+
+            #file_path = add_labels_and_entries("File Path")
 
             add_button = ctk.CTkButton(popup, text="Add", command=add_item)
             add_button.pack()
@@ -364,7 +385,6 @@ class SongPlayer(tk.Frame):
             if self.player.is_playing():
                 self.playbackSlider.set(self.player.get_position())
             self.after(100, self.update_slider)
-
 
 
 #Create the main application
