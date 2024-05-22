@@ -6,6 +6,8 @@ from Player import Player
 from Song import Song
 import MusicDatabase
 
+from dataframeManipulation import plot_song
+
 #pip install customtkinter
 
 
@@ -136,8 +138,8 @@ class SongPlayer(tk.Frame):
             self.artistLabel = ctk.CTkLabel(self, text="Unkown Artist", width=20, font=("Arial", 10))
 
             self.playButton = ctk.CTkButton(self, text="Play", command=self.play_song, width=20)
-            self.ForwardButton = ctk.CTkButton(self, text="Forward", command=self.forward_song, width=20)
-            self.BackwardButton = ctk.CTkButton(self, text="Backward", command=self.backward_song, width=20)
+            #self.ForwardButton = ctk.CTkButton(self, text="Forward", command=self.forward_song, width=20)
+            #self.BackwardButton = ctk.CTkButton(self, text="Backward", command=self.backward_song, width=20)
             self.AddButton = ctk.CTkButton(self, text="Add", command=self.add_song, width=20)
             self.InfoButton = ctk.CTkButton(self, text="Info", command=self.get_song_info, width=20)
             self.RemoveButton = ctk.CTkButton(self, text="Remove", command=self.remove_song, width=20)
@@ -145,9 +147,9 @@ class SongPlayer(tk.Frame):
             self.titleLabel.grid(row=0, column=2)
             self.artistLabel.grid(row=1, column=2)
 
-            self.BackwardButton.grid(row=2, column=1)
+            #self.BackwardButton.grid(row=2, column=1)
             self.playButton.grid(row=2, column=2)
-            self.ForwardButton.grid(row=2, column=3)
+            #self.ForwardButton.grid(row=2, column=3)
             
             self.AddButton.grid(row=1, column=0)
             self.RemoveButton.grid(row=2, column=0)
@@ -210,6 +212,13 @@ class SongPlayer(tk.Frame):
                 file_path_label = tk.Label(popup, text=f"File Path: {self.song.file_path}")
                 file_path_label.pack()
 
+                #show plot
+
+                try:
+                    plot_song(self.song)  
+                except Exception as e:
+                    print(f"Error plotting song: {e}")
+
                 close_button = ctk.CTkButton(popup, text="Close", command=popup.destroy)
                 close_button.pack()
 
@@ -268,6 +277,7 @@ class SongPlayer(tk.Frame):
                 self.remove_item_with_confirmation()
             else:
                 print("No song selected!")
+
 
 
 
