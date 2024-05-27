@@ -15,16 +15,6 @@ Attributes:
     sample_rate (int): The sample rate of the song, defaulting to 44100 Hz.
     paused (bool): A flag indicating if the song is currently paused.
     current_position (int): The current playback position in the audio data.
-
-Methods:
-    __init__: Initializes a Song object with the provided attributes.
-    play_song: Plays the chosen song from the current position.
-    pause_song: Pauses the song and can resume playback from the same position.
-    stop_song: Stops playing the song altogether and resets the position.
-    set_position: Sets the playback position to a specific point in the song.
-    next_song: Skips to the next song in a queue.
-    previous_song: Goes back to the previous song played.
-    volume: Adjusts the volume of the song playing.
 """
 
 # Default sample rate for playback
