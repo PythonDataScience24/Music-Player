@@ -67,7 +67,8 @@ class ScrollableListbox(tk.Frame):
         self.library = self.musicDB.get_library()
 
         for song in self.library:
-            self.listbox.insert(tk.END, song.title)
+            song_label = f"{song.title} - {song.artist} - {song.genre} - {song.year} - {song.album}"
+            self.listbox.insert(tk.END, song_label)
             
 
     def get_selected(self):
@@ -431,7 +432,7 @@ class  App(tk.Tk):
         super().__init__()
 
         self.geometry("800x600")
-        self.title("Custom Tkinter")
+        self.title("Music Player")
 
         self.musicDB = MusicDatabase.MusicDatabase()
 
